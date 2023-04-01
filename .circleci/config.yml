@@ -13,10 +13,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install dependencies - NPM packages
+          name: install dependencies - NPM packages for server
           command: cd server
           command: npm install
           command: cd ..
+      - run:
+          name: install dependencies - NPM packages for client
           command: cd website-react
           command: cd npm install
           command: cd ..
