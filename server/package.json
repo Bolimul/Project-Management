@@ -5,10 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "lint": "npx eslint src/*",
-    "test": "mocha tests/*.spec.js --color",
-    "start": "node src/index.js"
+    "dev": "nodemon index.js",
+    "lint": "npx eslint website-project/server/*",
+    "test": "mocha website-project/tests/*.spec.js --color",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",
