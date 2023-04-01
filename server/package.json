@@ -8,7 +8,7 @@
     "dev": "nodemon index.js",
     "lint": "npx eslint website-project/server/*",
     "test": "mocha website-project/tests/*.spec.js --color",
-    "start": " concurrently \"node index.js\"  \"cd .. && cd website-react && npm start\""
+    "start": " node index.js && cd .. && cd website-react && npm start"
   },
   "repository": {
     "type": "git",
