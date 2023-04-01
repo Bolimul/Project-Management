@@ -8,14 +8,13 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 
-var username1;
+var username1 = '';
 app.post('/react-app', (req, res) => {
     var {username, password} = req.body;
     username1 = username;
 });
 app.get('/react-app', (req, res) => {
     res.json({message: 'welcome, '+username1});
-    username1 = '';
 })
 app.get('/orange', (req, res) => {
     res.json({message : 'Hello from the server main page Orange'});

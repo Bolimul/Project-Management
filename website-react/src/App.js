@@ -6,12 +6,13 @@ function App() {
   const [username, setName] = React.useState('');
   const [password, setPass] = React.useState('');
   const [message, setData] = React.useState('');
-    const handleSubmit = (e) =>{
+    const handleSubmit = async(e) =>{
       e.preventDefault();
       console.log(e.target.uname.value);
       console.log(e.target.pass.value);
       try{
         axios.post('https://exercise-project-management.onrender.com/react-app',{username, password});
+        await delay(5);
         axios.get('https://exercise-project-management.onrender.com/react-app').then(resp => setData(resp.data.message));
       }catch(error)
       {
@@ -19,6 +20,7 @@ function App() {
       }
         
     }
+    const delay = ms =>new Promise(resolve => setTimeout(resolve, ms));
   return (
     <div className="App">
       <form onSubmit={handleSubmit} action="../../react-app" method="post"> 
