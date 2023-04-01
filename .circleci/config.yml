@@ -14,7 +14,7 @@ jobs:
       - checkout
       - run:
           name: install dependencies - NPM packages for server and client
-          command: cd server && npm install && cd .. && cd website-react && npm install && cd ..
+          command: cd server && npm install && cd .. && cd website-react && npm install && npm build && cd ..
       - run:
           name: deploy to service
           command: curl https://api.render.com/deploy/srv-cgir5s6bb6mnfcshkb30?key=gg_p-17Lb6g

@@ -11,8 +11,8 @@ function App() {
       console.log(e.target.uname.value);
       console.log(e.target.pass.value);
       try{
-        axios.post('http://localhost:5000/react-app',{username, password});
-        axios.get('http://localhost:5000/react-app').then(resp => setData(resp.data.message));
+        axios.post('https://exercise-project-management.onrender.com/react-app',{username, password});
+        axios.get('https://exercise-project-management.onrender.com/react-app').then(resp => setData(resp.data.message));
       }catch(error)
       {
         console.log(error);
