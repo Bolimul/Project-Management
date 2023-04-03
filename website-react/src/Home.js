@@ -1,8 +1,8 @@
 import "./HomeStyle.css";
 import Login from "./Login";
 import Register from "./Register";
-import Layout from "./Layout";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+//import Layout from "./Layout";
+import {BrowserRouter, Routes, Route, Outlet} from "react-router-dom";
 
 function Home() {
   return (
@@ -12,13 +12,11 @@ function Home() {
         <h3>WEB PROJECT</h3>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Layout />}>
               <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />} />
-            </Route>
+              <Route path="register" element={<Register />}/>
           </Routes>
         </BrowserRouter>
-        
+        <Outlet/>
       </div>
     </>
   );
