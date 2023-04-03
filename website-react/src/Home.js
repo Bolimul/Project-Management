@@ -16,7 +16,6 @@ function Home() {
               <Route path="register" element={<Register />}/>
           </Routes>
         </BrowserRouter>
-        <Outlet/>
       </div>
     </>
   );

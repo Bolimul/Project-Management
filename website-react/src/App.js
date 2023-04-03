@@ -8,6 +8,12 @@ export default function App() {
     <div className="App">
       <Home />
       <Navbar/>
+      <BrowserRouter>
+          <Routes>
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />}/>
+          </Routes>
+        </BrowserRouter>
     </div>
   );
 }
