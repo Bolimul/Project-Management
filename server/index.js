@@ -17,8 +17,6 @@ app.post('/login', (req, res) => {
 app.get('/login', (req, res) => {
     res.json({message: 'welcome, '+username1});
     username1 = '';
-
-    
 });
 app.listen(port, () => {
     console.log(`Server is up and running at port: ${port}`);
