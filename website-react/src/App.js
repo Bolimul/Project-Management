@@ -2,6 +2,7 @@
 import Navbar from "./Navbar";
 import Home from "./Home";
 import "./Styles.css";
+import {BrowserRouter, Routes, Route, Outlet} from "react-router-dom";
 
 export default function App() {
   return (
