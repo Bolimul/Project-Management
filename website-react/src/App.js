@@ -12,11 +12,11 @@ export default function App() {
       <Home />
       <Navbar/>
       <BrowserRouter>
-          <Routes>
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />}/>
-          </Routes>
-        </BrowserRouter>
+        <Routes>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />}/>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
