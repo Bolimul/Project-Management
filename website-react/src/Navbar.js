@@ -139,10 +139,10 @@ class Navbar extends Component {
                   <a href="index.html">Home</a>
                 </li>
                 <li>
-                  <a href="./login">Login</a>
+                  <a href="https://exercise-project-management-client.onrender.com/login">Login</a>
                 </li>
                 <li>
-                  <a href="./register">Register</a>
+                  <a href="https://exercise-project-management-client.onrender.com/register">Register</a>
                 </li>
               </ul>
             </div>
