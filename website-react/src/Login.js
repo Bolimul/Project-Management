@@ -2,6 +2,7 @@ import React,{useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import "./LoginStyle.css";
+import Home from "./Home";
 export const Login = (props) => {
     const [username,setUsername] = useState('');
     const [password,setPassword]  =useState('');

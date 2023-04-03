@@ -1,6 +1,8 @@
 import { Component } from "react";
 import { Outlet, Link} from "react-router-dom";
 import "./NavbarStyles.css";
+import "./App";
+import Home from "./Home";
 
 class Navbar extends Component {
   state = { clicked: false };
@@ -153,8 +155,8 @@ class Navbar extends Component {
                 className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}
               ></i>
             </div>
+            
           </nav>
-          <Outlet/>
         </>
       );
   }
