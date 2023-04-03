@@ -14,7 +14,15 @@ app.post('/login', (req, res) => {
     username1 = username;
 });
 app.get('/login', (req, res) => {
-    res.json({message: 'welcome, '+username1});
+    while(true)
+    {
+        if(username1 != null)
+        {
+            res.json({message: 'welcome, '+username1});
+            break;
+        }
+    }
+    username1 = '';
 })
 
 app.listen(port, () => {
