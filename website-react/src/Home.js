@@ -12,8 +12,8 @@ function Home() {
         <h3>WEB PROJECT</h3>
         <BrowserRouter>
           <Routes>
-              <Route path="login" element={<Login />} />
-              <Route path="register" element={<Register />}/>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />}/>
           </Routes>
         </BrowserRouter>
       </div>
