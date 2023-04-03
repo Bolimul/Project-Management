@@ -12,16 +12,14 @@ const delay = ms =>new Promise(resolve => setTimeout(resolve, ms));
 app.post('/login', (req, res) => {
     var {username, password} = req.body;
     username1 = username;
+    res.json({message: 'welcome, '+username1});
 });
 app.get('/login', (req, res) => {
-    async()=>{
-        await delay(100);
-        res.json({message: 'welcome, '+username1});
-        username1 = '';
-    }
+    res.json({message: 'welcome, '+username1});
+    username1 = '';
 
     
-})
+});
 app.listen(port, () => {
     console.log(`Server is up and running at port: ${port}`);
 });

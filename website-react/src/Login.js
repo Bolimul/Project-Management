@@ -11,9 +11,8 @@ export const Login = (props) => {
         console.log(username);
         const delay = ms =>new Promise(resolve => setTimeout(resolve, ms));
         try{
-            axios.post('https://exercise-project-management.onrender.com/login',{username, password});
-            await delay(5);
-            axios.get('https://exercise-project-management.onrender.com/login').then(resp => setData(resp.data.message));
+            axios.post('https://exercise-project-management.onrender.com/login',{username, password}).then(
+                axios.get('https://exercise-project-management.onrender.com/login').then(resp => setData(resp.data.message)));
           }catch(error)
           {
             console.log(error);
