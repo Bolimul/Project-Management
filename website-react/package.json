@@ -2,7 +2,6 @@
   "name": "website-react",
   "version": "0.1.0",
   "private": true,
-
   "proxy": "https://exercise-project-management-client.onrender.com",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",

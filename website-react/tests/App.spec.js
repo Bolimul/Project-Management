@@ -1,4 +1,4 @@
-import { expect } from "chai"; 
+const chai = require('chai')
 
 function password_validation(password){
     var password_user = 'abc234!';
@@ -11,12 +11,12 @@ function password_validation(password){
 
         it('successful password validation', ()=>{
             const userPassword = 'abc234!';
-            expect(password_validation(userPassword)).to.be.eql(true);
+            chai.expect(password_validation(userPassword)).to.be.eql(true);
         })
 
         it('unsuccessful password validation', ()=>{
             const password1 = 'a1111';
-            expect(password_validation(password1)).to.be.eql(false);
+            chai.expect(password_validation(password1)).to.be.eql(false);
         })
     })
 });
