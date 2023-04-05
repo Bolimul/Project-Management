@@ -4,8 +4,8 @@ import {Link} from "react-router-dom";
 import "./LoginStyle.css";
 
 function password_validation(password){
-    password_user = 'abc234!';
-    return password_user == password;
+    var password_user = 'abc234!';
+    return password_user === password;
   }
 
 export const Login = (props) => {
