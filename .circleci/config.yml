@@ -10,7 +10,7 @@ jobs:
     executor:
       name: node/default
     steps:
-     checkout 
+     - checkout 
      - run:
         name: Installing npm packages at server side
         command: cd server && npm install
