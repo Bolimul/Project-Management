@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "lint": "npx eslint /*",
+    "lint": "npx eslint /*.js",
     "test": "mocha tests/*.spec.js --color && cd .. && cd website-react && mocha tests/*.spec.js --color",
     "start": "node index.js",
     "start-client": "cd .. && cd website-react && npm start"
