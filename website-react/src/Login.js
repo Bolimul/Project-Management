@@ -18,7 +18,7 @@ export const Login = (props) => {
         try{
             if(password_validation(password))
             {
-                await axios.post('https://exercise-project-management.onrender.com/login',{username, password})
+                await axios.post('https://exercise-project-management.onrender.com/login',{username})
                 axios.get('https://exercise-project-management.onrender.com/login').then(resp => setData(resp.data.message));
             }
           }catch(error)

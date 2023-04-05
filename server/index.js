@@ -9,9 +9,7 @@ app.use(bodyParser.json());
 app.use(cors());
 let username1 = '';
 app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    const password1 = password;
-    password1.length();
+    const { username} = req.body;
     username1 = username;
     res.json({ message: `welcome, ${username1}` });
 });
