@@ -16,7 +16,7 @@ jobs:
           command: cd server && npm install
       - run:
           name: Installing npm packages at client side
-          command: cd.. && cd website-react && npm install
+          command: cd .. && cd website-react && npm install
       - run:
           name: run tests
           command: npm run test
