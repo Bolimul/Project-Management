@@ -10,16 +10,16 @@ jobs:
     executor:
       name: node/default
     steps:
-     - checkout 
-     - run:
-        name: Installing npm packages at server side
-        command: cd server && npm install
-     - run:
-        name: Installing npm packages at client side
-        command: cd.. && cd website-react && npm install
-     - run:
-        name: run tests
-        command: npm run test
+      - checkout 
+      - run:
+          name: Installing npm packages at server side
+          command: cd server && npm install
+      - run:
+          name: Installing npm packages at client side
+          command: cd.. && cd website-react && npm install
+      - run:
+          name: run tests
+          command: npm run test
       - run:
           name: run linter
           command: npm run lint
