@@ -11,7 +11,7 @@ let username1 = '';
 app.post('/login', (req) => {
     const { username } = req.body;
     username1 = username;
-    //res.json({ message: `welcome, ${username1}` });   
+    // res.json({ message: `welcome, ${username1}` });
 });
 app.get('/login', (req, res) => {
     res.json({ message: `welcome, ${username1}` });
