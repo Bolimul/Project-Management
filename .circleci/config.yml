@@ -10,7 +10,7 @@ jobs:
     executor:
       name: node/default
     steps:
-     - checkout
+     - checkout 
      - run:
        name: Installing npm packages at server side
        command: cd server && npm install
@@ -28,7 +28,7 @@ jobs:
         command: curl https://api.render.com/deploy/srv-cgir5s6bb6mnfcshkb30?key=gg_p-17Lb6g
       - run:
         name: deploy client side
-        command: curl ""
+#       command: 
 
 workflows:
   example-workflow:
