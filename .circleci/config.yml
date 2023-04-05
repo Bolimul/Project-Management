@@ -19,7 +19,7 @@ jobs:
           command: cd website-react && npm install
       - run:
           name: run tests
-          command: npm run test
+          command: cd server && npm run test && cd .. && cd website-react && npm run test
       - run:
           name: run linter
           command: npm run lint
