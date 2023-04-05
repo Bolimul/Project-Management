@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cors());
 let username1 = '';
-app.post('/login', (req) => {
+app.post('/login', (req, res) => {
     const { username } = req.body;
     username1 = username;
     res.json({ message: `welcome, ${username1}` });
