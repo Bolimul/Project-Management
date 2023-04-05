@@ -2,6 +2,12 @@ import React,{useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import "./LoginStyle.css";
+
+function password_validation(password){
+    password_user = 'abc234!';
+    return password_user == password;
+  }
+
 export const Login = (props) => {
     const [username,setUsername] = useState('');
     const [password,setPassword]  =useState('');
@@ -10,8 +16,11 @@ export const Login = (props) => {
         e.preventDefault();
         console.log(username);
         try{
-            await axios.post('https://exercise-project-management.onrender.com/login',{username, password})
-            axios.get('https://exercise-project-management.onrender.com/login').then(resp => setData(resp.data.message));
+            if(password_validation(password))
+            {
+                await axios.post('https://exercise-project-management.onrender.com/login',{username, password})
+                axios.get('https://exercise-project-management.onrender.com/login').then(resp => setData(resp.data.message));
+            }
           }catch(error)
           {
             console.log(error);

@@ -1,16 +1,22 @@
+import { expect } from "chai"; 
+
 function password_validation(password){
-    password_user = 'abc234!';
+    var password_user = 'abc234!';
     return password_user == password;
-  }
-    
+}
   
-  test('successful password validation',() =>{
-      const userPassword = 'abc234!';
-      expect(password_validation(userPassword)).to.be.eql(true);
-  });
-  
-  
-  test('unsuccessful password validation',() =>{
-    const password1 = 'a1111';
-    expect(password_validation(password1)).not.toBe(true);
-  });
+  describe('password validation', ()=>{
+
+    describe('#password_validation', ()=>{
+
+        it('successful password validation', ()=>{
+            const userPassword = 'abc234!';
+            expect(password_validation(userPassword)).to.be.eql(true);
+        })
+
+        it('unsuccessful password validation', ()=>{
+            const password1 = 'a1111';
+            expect(password_validation(password1)).to.be.eql(false);
+        })
+    })
+});
