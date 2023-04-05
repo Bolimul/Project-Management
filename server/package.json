@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "lint": "npx eslint server/*",
+    "lint": "npx eslint *.js",
     "test": "mocha tests/*.spec.js --color && cd .. && cd website-react && mocha tests/*.spec.js --color",
     "start": "node index.js",
     "start-client": "cd .. && cd website-react && npm start"
@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.18.2"
   },
