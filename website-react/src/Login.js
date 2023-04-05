@@ -2,13 +2,21 @@ import React,{useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import "./LoginStyle.css";
-import Home from "./Home";
 export const Login = (props) => {
     const [username,setUsername] = useState('');
     const [password,setPassword]  =useState('');
     const [message, setData] = React.useState('');
-    //Code paste 3
-    }
+    const handleSubmit = async(e) =>{
+        e.preventDefault();
+        console.log(username);
+        try{
+            await axios.post('https://exercise-project-management.onrender.com/login',{username, password})
+            axios.get('https://exercise-project-management.onrender.com/login').then(resp => setData(resp.data.message));
+          }catch(error)
+          {
+            console.log(error);
+          }
+        }
     return (
         <div className="auth-form-container">
             <h2>Login page</h2>
