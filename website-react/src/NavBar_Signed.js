@@ -1,10 +1,10 @@
 import { Component } from "react";
 import { Outlet, Link} from "react-router-dom";
-import "./NavbarStyles.css";
+import "./NavBarStyleSign.css";
 import "./App";
 import Home from "./Home";
 
-class Navbar extends Component {
+class NavBar_Signed extends Component {
   state = { clicked: false };
   handleClick = () => {
     this.setState({ clicked: !this.state.clicked });
@@ -135,8 +135,8 @@ class Navbar extends Component {
             </a>
             <div>
               <ul
-                id="navbar"
-                className={this.state.clicked ? "#navbar avtive" : "#navbar"}
+                id="NavBar_Signed"
+                className={this.state.clicked ? "#NavBar_Signed avtive" : "#NavBar_Signed"}
               >
                 <li>
                   <Link to="/">Home</Link>
@@ -176,4 +176,4 @@ class Navbar extends Component {
       );
   }
 }
-export default Navbar;
+export default NavBar_Signed;
