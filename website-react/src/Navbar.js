@@ -147,6 +147,15 @@ class Navbar extends Component {
                 <li>
                   <Link to="/register">Register</Link>
                 </li>
+                <li>
+                  <Link to="/Blog">Blog</Link>
+                </li>
+                <li>
+                  <Link to="/Friends">Friends</Link>
+                </li>
+                <li>
+                  <Link to="/Profile">Profile</Link>
+                </li>
               </ul>
             </div>
             <div id="mobile" onClick={this.handleClick}>
