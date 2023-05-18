@@ -10,9 +10,9 @@ const FriendSearch = () => {
   const handleSearch = () => {
     // Existing list of people
     const existingPeople = [
-      { id: 1, firstName: 'John', lastName: 'Doe' },
-      { id: 2, firstName: 'Jane', lastName: 'Smith' },
-      { id: 3, firstName: 'David', lastName: 'Johnson' },
+      { id: 1, firstName: 'Maya', lastName: 'Rozenberg' },
+      { id: 2, firstName: 'Anna', lastName: 'Sol' },
+      { id: 3, firstName: 'Netanel', lastName: 'Fadlon' },
       // Add more people to the list as needed
     ];
 

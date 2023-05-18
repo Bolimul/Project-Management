@@ -1,0 +1,38 @@
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.friend-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.friend-name {
+  margin-left: 10px;
+}
+
+.friend-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.friend-link:hover {
+  text-decoration: none;
+}
+

@@ -148,7 +148,7 @@ class NavBar_Signed extends Component {
                   <Link to="/Profile">Profile</Link>
                 </li>
                 <li>
-                  <Link to="/Friend">Friend</Link>
+                  <Link to="/Friends">Friends</Link>
                 </li>
                 <li>
                   <Link to="/Add Friend">Add Friend</Link>
