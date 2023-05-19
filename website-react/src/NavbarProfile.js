@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Outlet, Link} from "react-router-dom";
 import "./NavbarStyles.css";
-import "./App";
+import "./AppProfile";
 import Home from "./Home";
 
 class NavbarProfile extends Component {

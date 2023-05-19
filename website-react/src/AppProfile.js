@@ -8,7 +8,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 
 export default function AppProfile() {
   return (
-      <div className="App">
+      <div className="AppProfile">
       <BrowserRouter>
       <NavbarProfile />
         <Routes>
