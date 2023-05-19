@@ -1,0 +1,26 @@
+.friend-search-container {
+  padding: 20px;
+}
+
+.search-container {
+  margin-bottom: 10px;
+}
+
+.search-results ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.add-friend-button {
+  margin-left: 10px;
+}
+
+.friends-list button {
+  margin-left: 10px;
+}
+
+.friends-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
