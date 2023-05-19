@@ -4,7 +4,7 @@ import "./NavbarStyles.css";
 import "./App";
 import Home from "./Home";
 
-class Navbar extends Component {
+class NavbarProfile extends Component {
   state = { clicked: false };
   handleClick = () => {
     this.setState({ clicked: !this.state.clicked });
@@ -148,13 +148,13 @@ class Navbar extends Component {
                   <Link to="/register">Register</Link>
                 </li>
                 <li>
-                  <Link to="/Blog">Blog</Link>
+                  <Link to="/Blog">Posts</Link>
                 </li>
                 <li>
-                  <Link to="/Friends">Friends</Link>
+                  <Link to="/Friends">Analytics</Link>
                 </li>
                 <li>
-                  <Link to="/personalInfo">Profile</Link>
+                  <Link to="/personalInfoStudent">Info</Link>
                 </li>
               </ul>
             </div>
@@ -170,4 +170,4 @@ class Navbar extends Component {
       );
   }
 }
-export default Navbar;
+export default NavbarProfile;

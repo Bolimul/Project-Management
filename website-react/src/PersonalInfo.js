@@ -4,9 +4,13 @@ var ExampleAccount = {
     image: "https://upload.wikimedia.org/wikipedia/en/c/cc/Wojak_cropped.jpg",
     firstName: "Sam",
     lastName: "Rogers",
-    pStatus: "Student",
+    spec: "Chemistry",
     bio: "I'm a student",
-    email: "samrog@gmail.com"
+    phoneNum: "+1234567890",
+    pQuestion:"How do you do?",
+    pAnswer: "Fine",
+    email: "samrog@gmail.com",
+    status: "Student"
 }
 
 
@@ -39,8 +43,11 @@ export const PersonalInfo = (props) =>
                 <img src={ExampleAccount.image} alt=""/>
                 <p>First name: {ExampleAccount.firstName}</p>
                 <p>Last name: {ExampleAccount.lastName}</p>
-                <p>Status: {ExampleAccount.pStatus}</p>
+                <p>Status: {ExampleAccount.spec}</p>
                 <p>Bio: {ExampleAccount.bio}</p>
+                <p>Speciality: {ExampleAccount.spec}</p>
+                <p>Personal question: {ExampleAccount.pQuestion}</p>
+                <p>Personal Answer: {ExampleAccount.pAnswer}</p>
                 <p>Email: {ExampleAccount.email}</p>
             </div>
             <form onSubmit={handleSubmit}>
