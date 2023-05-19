@@ -10,6 +10,7 @@ import FriendsPage from "./FriendsPage";
 import "./Styles.css";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 
+
 export default function App() {
   return (
       <div className="App">
