@@ -170,7 +170,6 @@ class NavBar_Signed extends Component {
                 className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}
               ></i>
             </div>
-            
           </nav>
         </>
       );
