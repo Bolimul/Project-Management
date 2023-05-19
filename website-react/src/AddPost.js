@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './HomeStyle.css';
+import './AddPost.css';
 
-const Home = () => {
+const AddPost = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
@@ -37,7 +37,7 @@ const Home = () => {
         userName: userName,
         likes: 0,
         shares: 0,
-        saved: false, // New "saved" property
+        saved: false,
       };
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     }
@@ -196,4 +196,4 @@ const PostForm = ({ onClose, onPost, editMode, initialPostText, initialUserName 
   );
 };
 
-export default Home;
+export default AddPost;

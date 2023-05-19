@@ -139,7 +139,7 @@ class NavBar_Signed extends Component {
                 className={this.state.clicked ? "#NavBar_Signed avtive" : "#NavBar_Signed"}
               >
                 <li>
-                  <Link to="/">Home</Link>
+                  <Link to="/home">Home</Link>
                 </li>
                 <li>
                   <Link to="/login">Login</Link>
