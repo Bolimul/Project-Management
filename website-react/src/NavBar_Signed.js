@@ -189,7 +189,6 @@ class NavBar_Signed extends Component {
           </>
         );
     }
-      
   }
 }
 export default NavBar_Signed;

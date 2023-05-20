@@ -1,44 +1,85 @@
-import React, { useState } from "react";
-import "./HomeStyle.css";
+import React, { useState } from 'react';
+import AddPost from './AddPost';
+import './HomeStyle.css';
 
-function Home() {
-  const [posts, setPosts] = useState([]);
+const Home = () => {
+  const [allPosts, setAllPosts] = useState([]);
 
-  const handlePostSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const postContent = formData.get("content");
-
-    if (postContent.trim() !== "") {
-      const newPost = {
+  const handleShare = (postId) => {
+    const postToShare = allPosts.find((post) => post.id === postId);
+    if (postToShare) {
+      const sharedPost = {
         id: Date.now(),
-        content: postContent.trim(),
-        timestamp: new Date().toISOString(),
+        text: postToShare.text,
+        userName: 'Shared from: ' + postToShare.userName,
+        likes: 0,
+        shares: 0,
+        saved: false,
+        shared: true,
       };
-
-      setPosts([newPost, ...posts]);
-      e.target.reset();
+      setAllPosts((prevPosts) => [sharedPost, ...prevPosts]);
     }
   };
 
+  const handleLike = (postId) => {
+    setAllPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, likes: post.likes + 1 } : post
+      )
+    );
+  };
+
+  const handleSave = (postId) => {
+    setAllPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, saved: !post.saved } : post
+      )
+    );
+  };
+
+  const handlePost = (postText, userName) => {
+    const newPost = {
+      id: Date.now(),
+      text: postText,
+      userName: userName,
+      likes: 0,
+      shares: 0,
+      saved: false,
+    };
+    setAllPosts((prevPosts) => [newPost, ...prevPosts]);
+  };
+
   return (
-    <>
-      <div className="home">
-        <h1>HOME PAGE :-)</h1>
-        <h3>WEB PROJECT</h3>
-        <form onSubmit={handlePostSubmit}>
-          <textarea name="content" placeholder="Add Post.." />
-          <button type="POST IT!">Post</button>
-        </form>
-        {posts.map((post) => (
-          <div key={post.id} className="post">
-            <p>{post.content}</p>
-            <small>{post.timestamp}</small>
-          </div>
-        ))}
-      </div>
-    </>
+    <div className="home-container">
+      <h1>Posts</h1>
+      <AddPost onPost={handlePost} />
+      {allPosts.length > 0 && (
+        <div className="post-list">
+          {allPosts.map((post) => (
+            <div className={`post-container${post.shared ? ' shared' : ''}`} key={post.id}>
+              <h3>{post.userName}</h3>
+              <p>{post.text}</p>
+              <div className="post-actions">
+                <button className="like-button" onClick={() => handleLike(post.id)}>
+                  Like ({post.likes})
+                </button>
+                <button className="share-button" onClick={() => handleShare(post.id)}>
+                  Share ({post.shares})
+                </button>
+                <button
+                  className={`save-button${post.saved ? ' saved' : ''}`}
+                  onClick={() => handleSave(post.id)}
+                >
+                  {post.saved ? 'Saved' : 'Save'}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
-}
+};
 
 export default Home;
+
