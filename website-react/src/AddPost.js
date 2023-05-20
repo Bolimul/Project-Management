@@ -6,6 +6,7 @@ const AddPost = () => {
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [selectedTopic, setSelectedTopic] = useState('');
 
   const handleButtonClick = () => {
     setIsFormOpen(true);
@@ -25,7 +26,13 @@ const AddPost = () => {
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
           post.id === editPostId
-            ? { ...post, text: postText, userName: userName }
+            ? {
+                ...post,
+                text: `${selectedTopic}: ${postText}`,
+                userName: userName,
+                image: postImage,
+                textColor: textColor,
+              }
             : post
         )
       );
@@ -33,8 +40,10 @@ const AddPost = () => {
       // Creating a new post
       const newPost = {
         id: Date.now(),
-        text: postText,
+        text: `${selectedTopic}: ${postText}`,
         userName: userName,
+        image: postImage,
+        textColor: textColor,
         likes: 0,
         shares: 0,
         saved: false,
@@ -51,6 +60,9 @@ const AddPost = () => {
       setIsFormOpen(true);
       setEditMode(true);
       setEditPostId(post.id);
+      setSelectedTopic(getTopicFromPostText(post.text));
+      setPostImage(post.image);
+      setTextColor(post.textColor);
     }
   };
 
@@ -82,6 +94,49 @@ const AddPost = () => {
     );
   };
 
+  const getTopicFromPostText = (postText) => {
+    const topicEndIndex = postText.indexOf(':');
+    if (topicEndIndex !== -1) {
+      return postText.substring(0, topicEndIndex).trim();
+    }
+    return '';
+  };
+
+  const [postImage, setPostImage] = useState('');
+  const [textColor, setTextColor] = useState('#000000');
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        const image = new Image();
+        image.src = reader.result;
+
+        image.onload = () => {
+          const maxWidth = 1000;
+          const maxHeight = 1000;
+
+          if (image.width <= maxWidth && image.height <= maxHeight) {
+            setPostImage(reader.result);
+          } else {
+            // Display a pop-up message or show an error state
+            alert('Picture is too big(1000 X 1000 max)');
+          }
+        };
+      }
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleTextColorChange = (event) => {
+    setTextColor(event.target.value);
+  };
+
   return (
     <div className="home-container">
       <button className="add-post-button" onClick={handleButtonClick}>
@@ -94,6 +149,12 @@ const AddPost = () => {
           editMode={editMode}
           initialPostText={editMode && editPostId ? posts.text : ''}
           initialUserName={editMode && editPostId ? posts.userName : ''}
+          selectedTopic={selectedTopic}
+          onTopicChange={setSelectedTopic}
+          postImage={postImage}
+          onImageChange={handleImageChange}
+          textColor={textColor}
+          onTextColorChange={handleTextColorChange}
         />
       )}
       {posts.length > 0 && (
@@ -123,7 +184,14 @@ const AddPost = () => {
                   </button>
                 </div>
               </div>
-              <div className="post-text">{post.text}</div>
+              {post.image && (
+                <div className="post-image">
+                  <img src={post.image} alt="Post" />
+                </div>
+              )}
+              <div className="post-text" style={{ color: post.textColor }}>
+                {post.text}
+              </div>
               <button
                 className="edit-button"
                 onClick={() => handleEdit(post.id)}
@@ -144,7 +212,19 @@ const AddPost = () => {
   );
 };
 
-const PostForm = ({ onClose, onPost, editMode, initialPostText, initialUserName }) => {
+const PostForm = ({
+  onClose,
+  onPost,
+  editMode,
+  initialPostText,
+  initialUserName,
+  selectedTopic,
+  onTopicChange,
+  postImage,
+  onImageChange,
+  textColor,
+  onTextColorChange,
+}) => {
   const [postText, setPostText] = useState(initialPostText || '');
   const [userName, setUserName] = useState(initialUserName || '');
 
@@ -154,6 +234,10 @@ const PostForm = ({ onClose, onPost, editMode, initialPostText, initialUserName 
 
   const handleUserNameChange = (event) => {
     setUserName(event.target.value);
+  };
+
+  const handleTopicChange = (event) => {
+    onTopicChange(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -177,11 +261,42 @@ const PostForm = ({ onClose, onPost, editMode, initialPostText, initialUserName 
           value={userName}
           onChange={handleUserNameChange}
         />
+        <select
+          className="topic-select"
+          value={selectedTopic}
+          onChange={handleTopicChange}
+        >
+          <option value="">Select a Topic</option>
+          <option value="Cardiology">Cardiology</option>
+          <option value="Dermatology">Dermatology</option>
+          <option value="Endocrinology">Endocrinology</option>
+          <option value="Gastroenterology">Gastroenterology</option>
+          <option value="Hematology">Hematology</option>
+          <option value="Nephrology">Nephrology</option>
+          <option value="Neurology">Neurology</option>
+          <option value="Oncology">Oncology</option>
+          <option value="Orthopedics">Orthopedics</option>
+          <option value="Pulmonology">Pulmonology</option>
+          <option value="Urology">Urology</option>
+          <option value="Other">Other</option>
+        </select>
         <textarea
           className="post-textarea"
           placeholder="Write a post..."
           value={postText}
           onChange={handlePostTextChange}
+        />
+        <input
+          type="file"
+          accept="image/*"
+          className="image-input"
+          onChange={onImageChange}
+        />
+        <input
+          type="color"
+          className="text-color-input"
+          value={textColor}
+          onChange={onTextColorChange}
         />
         <button className="post-button" type="submit">
           {editMode ? 'Update' : 'Post'}
