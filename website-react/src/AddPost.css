@@ -50,7 +50,7 @@
 .edit-button,
 .delete-button {
   padding: 5px 10px;
-  border: none;
+  border: rgb(43, 152, 248);
   border-radius: 5px;
   cursor: pointer;
 }
