@@ -153,7 +153,7 @@ class NavbarStart extends Component {
                         className={this.state.clicked ? "#NavBar_Signed avtive" : "#NavBar_Signed"}
                       >
                         <li>
-                          <Link to="/" onClick={()=>this.setState({nS: 0})}>Home</Link>
+                          <Link to="/home" onClick={()=>this.setState({nS: 0})}>Home</Link>
                         </li>
                         <li>
                           <Link to="/login"onClick={()=>this.setState({nS: 2})}>Login</Link>
