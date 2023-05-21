@@ -162,7 +162,7 @@ class NavBar_Signed extends Component {
                     <Link to="/profile"onClick={()=>this.setState({nS: 1})}>Profile</Link>
                   </li>
                   <li>
-                    <Link to="/Friend"onClick={()=>this.setState({nS: 0})}>Friend</Link>
+                    <Link to="/friends"onClick={()=>this.setState({nS: 0})}>Friend</Link>
                   </li>
                   <li>
                     <Link to="/Add Friend"onClick={()=>this.setState({nS: 0})}>Add Friend</Link>
