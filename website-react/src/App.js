@@ -7,7 +7,7 @@ import PersonalAreaPostsSaved from "./PersonalAreaPostsSaved";
 
 import "./Styles.css";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import PersonalAreaPostsSaved from "./PersonalAreaPostsSaved";
+
 
 export default function App() {
   return (
@@ -18,7 +18,6 @@ export default function App() {
           <Route to="/" element={<Home />}/>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />}/>
-          <Route path="/savedPosts" element={<PersonalAreaPostsSaved />}/>
         </Routes>
       </BrowserRouter>
     </div>
