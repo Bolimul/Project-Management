@@ -5,7 +5,15 @@ const AddPost = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([
+    {
+      id: '123123',
+      userName: 'Sam Rogers',
+      text: 'Hello World!',
+      likes: 3,
+      shares: 2,
+    },
+  ]);
   const [selectedTopic, setSelectedTopic] = useState('');
 
   const handleButtonClick = () => {
@@ -86,12 +94,34 @@ const AddPost = () => {
     );
   };
 
-  const handleSave = (postId) => {
+  const handleSave = async (postId) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === postId ? { ...post, saved: !post.saved } : post
       )
     );
+  
+    // Save the post to the backend
+    try {
+      const response = await fetch('/api/savePost', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postId }), // Send the post ID to the backend
+      });
+  
+      if (!response.ok) {
+        // Handle error if the request was not successful
+        throw new Error('Failed to save the post');
+      }
+  
+      // Post saved successfully
+      console.log('Post saved successfully');
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
   };
 
   const getTopicFromPostText = (postText) => {

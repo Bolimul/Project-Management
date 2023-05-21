@@ -9,7 +9,7 @@ const AddPostHome = () => {
   const [posts, setPosts] = useState([
     {
       id: '1',
-      userName: 'Lebron James',
+      userName: 'Dr Lebron James',
       text: 'Hello World!',
       likes: 0,
       shares: 0,
@@ -17,19 +17,19 @@ const AddPostHome = () => {
     },
     {
       id: '2',
-      userName: 'Steph Curry',
+      userName: 'Dr Steph Curry',
       text: 'Splash.',
-      likes: 0,
+      likes: 2,
       shares: 0,
-      followed: false,
+      followed: true,
     },
     {
         id: '3',
-        userName: 'Jayson Tatum',
-        text: 'Lets gooo.',
-        likes: 0,
-        shares: 0,
-        followed: false,
+        userName: 'Dr Jayson Tatum',
+        text: 'Lets gooo!',
+        likes: 3,
+        shares: 2,
+        followed: true,
     },
   ]);
   const handleButtonClick = () => {
