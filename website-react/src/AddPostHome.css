@@ -36,6 +36,8 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 1s ease;
+
 }
 
 .follow-button.followed {
