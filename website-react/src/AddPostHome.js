@@ -12,7 +12,7 @@ const AddPostHome = () => {
       userName: 'Dr Lebron James',
       text: 'Hello World!',
       likes: 0,
-      shares: 0,
+      shares: true,
       followed: false,
     },
     {
@@ -20,18 +20,21 @@ const AddPostHome = () => {
       userName: 'Dr Steph Curry',
       text: 'Splash.',
       likes: 2,
-      shares: 0,
+      shares: false,
       followed: true,
     },
     {
-        id: '3',
-        userName: 'Dr Jayson Tatum',
-        text: 'Lets gooo!',
-        likes: 3,
-        shares: 2,
-        followed: true,
+      id: '3',
+      userName: 'Dr Jayson Tatum',
+      text: 'Lets gooo!',
+      likes: 3,
+      shares: false,
+      followed: true,
     },
   ]);
+
+  const [likedPosts, setLikedPosts] = useState([]); // New state variable to keep track of liked posts
+
   const handleButtonClick = () => {
     setIsFormOpen(true);
     setEditMode(false);
@@ -69,7 +72,7 @@ const AddPostHome = () => {
         image: postImage,
         textColor: textColor,
         likes: 0,
-        shares: 0,
+        shares: false,
         saved: false,
         isFollowing: false,
       };
@@ -96,17 +99,22 @@ const AddPostHome = () => {
   };
 
   const handleLike = (postId) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === postId ? { ...post, likes: post.likes + 1 } : post
-      )
-    );
+    if (!likedPosts.includes(postId)) {
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId ? { ...post, likes: post.likes + 1 } : post
+        )
+      );
+      setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
+    }
   };
 
   const handleShare = (postId) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
-        post.id === postId ? { ...post, shares: post.shares + 1 } : post
+        post.id === postId
+          ? { ...post, shares: post.shares + (post.shared ? -1 : 1), shared: !post.shared }
+          : post
       )
     );
   };
@@ -226,10 +234,10 @@ const AddPostHome = () => {
                     Like ({post.likes})
                   </button>
                   <button
-                    className="share-button"
-                    onClick={() => handleShare(post.id)}
+                   className={`share-button${post.shared ? ' shared' :""}`}
+                   onClick={() => handleShare(post.id)}
                   >
-                    Share ({post.shares})
+                    {post.shared ? 'Shared' : 'Share'} {post.shared && ''}
                   </button>
                   <button
                     className={`save-button${post.saved ? ' saved' : ''}`}
