@@ -111,12 +111,34 @@ const AddPostHome = () => {
     );
   };
 
-  const handleSave = (postId) => {
+  const handleSave = async (postId) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === postId ? { ...post, saved: !post.saved } : post
       )
     );
+  
+    // Save the post to the backend
+    try {
+      const response = await fetch('/api/savePost', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postId }), // Send the post ID to the backend
+      });
+  
+      if (!response.ok) {
+        // Handle error if the request was not successful
+        throw new Error('Failed to save the post');
+      }
+  
+      // Post saved successfully
+      console.log('Post saved successfully');
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
   };
 
   const handleFollow = (postId) => {
