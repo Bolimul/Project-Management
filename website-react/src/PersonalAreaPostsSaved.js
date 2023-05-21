@@ -16,8 +16,8 @@ const post_liked = [
 
 function PersonalAreaPostsSaved(){
     return(
-                <div className='w-screen h-screen grid grid-rows-2 '>
-                    <div className="w-full h-full centered">
+                <div className='Saved Posts'>
+                    <div>
                         <h1>Posts you Saved</h1>
                         <h2>{post_saved[0]}</h2>
                         <h2>{post_saved[1]}</h2>
@@ -27,7 +27,7 @@ function PersonalAreaPostsSaved(){
        
                     </div>
 
-                <div className="w-full h-full centered">
+                <div>
                     <h1>Posts you Liked</h1>
                     <h2>{post_liked[0]}</h2>
                     <h2>{post_liked[1]}</h2>

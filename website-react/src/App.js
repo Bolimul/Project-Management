@@ -3,11 +3,10 @@ import Navbar from "./Navbar";
 import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
-import PersonalAreaPostsSaved from "./PersonalAreaPostsSaved";
+import PersonalAreaPostsSaved from "./PersonalAreaPostsSaved"
 
 import "./Styles.css";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-
 
 export default function App() {
   return (
