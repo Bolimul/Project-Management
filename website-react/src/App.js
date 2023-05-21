@@ -4,7 +4,9 @@ import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
 import FriendSearch from "./FriendSearch";
+import FriendsPage from "./FriendsPage";
 import AddPost from "./AddPost";
+
 
 import "./Styles.css";
 import {BrowserRouter, Routes, Route, Redirect} from "react-router-dom";
@@ -13,6 +15,7 @@ import {useState, Fragment} from "react";
 import PersonalInfo from "./PersonalInfo";
 import AppProfile from "./AppProfile";
 import NavbarStart from "./NavbarStart";
+
 
 
 export default function App() {
@@ -34,8 +37,12 @@ export default function App() {
             <Route path="/add friend" element={<FriendSearch />}/>
             <Route path="/personalInfo" element={<PersonalInfo/>}/>
             <Route path="/Blog" element={<AddPost />} />
+            <Route path="/friends" element={<FriendsPage />}/>
         </Routes>
       </BrowserRouter>
     </div>
   );
 }
+
+
+
