@@ -89,7 +89,9 @@ const AddPost = () => {
   const handleShare = (postId) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
-        post.id === postId ? { ...post, shares: post.shares + 1 } : post
+        post.id === postId
+          ? { ...post, shares: post.shares + (post.shared ? -1 : 1), shared: !post.shared }
+          : post
       )
     );
   };
@@ -201,10 +203,10 @@ const AddPost = () => {
                     Like ({post.likes})
                   </button>
                   <button
-                    className="share-button"
-                    onClick={() => handleShare(post.id)}
+                   className={`share-button${post.shared ? ' shared' :""}`}
+                   onClick={() => handleShare(post.id)}
                   >
-                    Share ({post.shares})
+                    {post.shared ? 'Shared' : 'Share'} {post.shared && ''}
                   </button>
                   <button
                     className={`save-button${post.saved ? ' saved' : ''}`}
