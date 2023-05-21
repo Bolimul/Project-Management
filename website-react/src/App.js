@@ -1,4 +1,3 @@
-import NavbarProfile from "./NavbarProfile";
 import NavBar_Signed from "./NavBar_Signed"
 import Home from "./Home";
 import Login from "./Login";
@@ -14,8 +13,8 @@ import {BrowserRouter, Routes, Route, Redirect} from "react-router-dom";
 import {useState, Fragment} from "react";
 
 import PersonalInfo from "./PersonalInfo";
-import AppProfile from "./AppProfile";
 import NavbarStart from "./NavbarStart";
+import StatisticalInfo from "./StatisticalInfo";
 
 
 
@@ -39,7 +38,8 @@ export default function App() {
             <Route path="/personalInfo" element={<PersonalInfo/>}/>
             <Route path="/Blog" element={<AddPost />} />
             <Route path="/friends" element={<FriendsPage />}/>
-             <Route path="/savedPosts" element={<PersonalAreaPostsSaved />}/>
+            <Route path="/savedPosts" element={<PersonalAreaPostsSaved />}/>
+            <Route path="/analitycs" element={<StatisticalInfo/>}/>
         </Routes>
       </BrowserRouter>
     </div>
