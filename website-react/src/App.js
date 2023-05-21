@@ -3,6 +3,7 @@ import NavBar_Signed from "./NavBar_Signed"
 import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
+import PersonalAreaPostsSaved from "./PersonalAreaPostsSaved"
 import FriendSearch from "./FriendSearch";
 import FriendsPage from "./FriendsPage";
 import AddPost from "./AddPost";
@@ -38,6 +39,7 @@ export default function App() {
             <Route path="/personalInfo" element={<PersonalInfo/>}/>
             <Route path="/Blog" element={<AddPost />} />
             <Route path="/friends" element={<FriendsPage />}/>
+             <Route path="/savedPosts" element={<PersonalAreaPostsSaved />}/>
         </Routes>
       </BrowserRouter>
     </div>
