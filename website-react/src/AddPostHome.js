@@ -1,21 +1,37 @@
 import React, { useState } from 'react';
-import './AddPost.css';
+import './AddPostHome.css';
 
-const AddPost = () => {
+const AddPostHome = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
+  const [selectedTopic, setSelectedTopic] = useState('');
   const [posts, setPosts] = useState([
     {
-      id: '123123',
-      userName: 'Sam Rogers',
+      id: '1',
+      userName: 'Dr Lebron James',
       text: 'Hello World!',
-      likes: 3,
-      shares: 2,
+      likes: 0,
+      shares: 0,
+      followed: false,
+    },
+    {
+      id: '2',
+      userName: 'Dr Steph Curry',
+      text: 'Splash.',
+      likes: 2,
+      shares: 0,
+      followed: true,
+    },
+    {
+        id: '3',
+        userName: 'Dr Jayson Tatum',
+        text: 'Lets gooo!',
+        likes: 3,
+        shares: 2,
+        followed: true,
     },
   ]);
-  const [selectedTopic, setSelectedTopic] = useState('');
-
   const handleButtonClick = () => {
     setIsFormOpen(true);
     setEditMode(false);
@@ -55,6 +71,7 @@ const AddPost = () => {
         likes: 0,
         shares: 0,
         saved: false,
+        isFollowing: false,
       };
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     }
@@ -122,6 +139,14 @@ const AddPost = () => {
       // Handle error
       console.error(error);
     }
+  };
+
+  const handleFollow = (postId) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, isFollowing: !post.isFollowing } : post
+      )
+    );
   };
 
   const getTopicFromPostText = (postText) => {
@@ -211,6 +236,12 @@ const AddPost = () => {
                     onClick={() => handleSave(post.id)}
                   >
                     {post.saved ? 'Saved' : 'Save'}
+                  </button>
+                  <button
+                    className={`follow-button${post.isFollowing ? ' following' : ''}`}
+                    onClick={() => handleFollow(post.id)}
+                  >
+                    {post.isFollowing ? 'Following' : 'Follow'}
                   </button>
                 </div>
               </div>
@@ -341,4 +372,4 @@ const PostForm = ({
   );
 };
 
-export default AddPost;
+export default AddPostHome;

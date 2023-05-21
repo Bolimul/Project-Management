@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AddPost from './AddPost';
+import AddPostHome from './AddPostHome';
 import './HomeStyle.css';
 
 const Home = () => {
@@ -52,7 +52,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <h1>Posts</h1>
-      <AddPost onPost={handlePost} />
+      <AddPostHome onPost={handlePost} />
       {allPosts.length > 0 && (
         <div className="post-list">
           {allPosts.map((post) => (
