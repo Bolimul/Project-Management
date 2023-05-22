@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import {auth, db} from "./firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
 
 const countries = [
     "Australia",
@@ -77,7 +80,7 @@ export const Register = (props) => {
   const [answer, setAnswer] = useState("");
   const [image, setImage] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     console.log({
       firstName,
@@ -93,6 +96,35 @@ export const Register = (props) => {
       answer,
       image,
     });
+    var userId = ""
+    await createUserWithEmailAndPassword(auth, email, "abc234!").then((userCredential) => {
+      userId = userCredential.user.uid
+    })
+    const data = {
+      FirstName: firstName,
+      LastName: lastName,
+      Country: country,
+      City: city,
+      Specialty: specialty,
+      UserType: userType,
+      Email: email,
+      WorkplaceName: workplaceName,
+      LicenseNumber: licenseNumber,
+      organizationName: OrganizationName,
+      organizationAddress: OrganizationAdress,
+      organizationPhone: OrganizationPhone,
+      studentNumber: StudentNumber,
+      universityName: UniversityName,
+      nameCEO: NameCEO,
+      Gender: gender,
+      BioInfo: bioInfo,
+      PhoneNumber: phoneNumber,
+      PQuestion: personalQuestion,
+      AnswerToQ: answer,
+      UserId: userId
+    }
+    const colRef = collection(db, "users-profile-data")
+    await addDoc(colRef, data)
   };
 
   return (

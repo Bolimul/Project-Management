@@ -15,6 +15,7 @@ import {useState, Fragment} from "react";
 import PersonalInfo from "./PersonalInfo";
 import NavbarStart from "./NavbarStart";
 import StatisticalInfo from "./StatisticalInfo";
+import {auth} from "./firebase";
 
 
 
@@ -29,7 +30,7 @@ export default function App() {
     <div className="App" onClick={handlePersonalPage}>
       
       <BrowserRouter>
-      <NavbarStart/>
+      {auth?.currentUser?.uid ? <NavBar_Signed/> : <NavbarStart/>}
         <Routes>
             <Route path="/home" element={<Home />}/>
             <Route path="/login" element={<Login />} />
@@ -39,7 +40,7 @@ export default function App() {
             <Route path="/Blog" element={<AddPost />} />
             <Route path="/friends" element={<FriendsPage />}/>
             <Route path="/savedPosts" element={<PersonalAreaPostsSaved />}/>
-            <Route path="/analitycs" element={<StatisticalInfo/>}/>
+            <Route path="/analytics" element={<StatisticalInfo/>}/>
         </Routes>
       </BrowserRouter>
     </div>

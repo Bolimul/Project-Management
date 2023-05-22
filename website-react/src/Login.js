@@ -1,7 +1,9 @@
 import React,{useState} from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "./LoginStyle.css";
+import {auth} from "./firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 function password_validation(password){
     var password_user = 'abc234!';
@@ -9,6 +11,7 @@ function password_validation(password){
 }
 
 export const Login = (props) => {
+    const navigate = useNavigate()
     const [username,setUsername] = useState('');
     const [password,setPassword]  = useState('');
     const [loginType, setLoginType] = useState('email'); // default login type is email
@@ -25,10 +28,9 @@ export const Login = (props) => {
           let isValidPhone = /^\d{10}$/.test(username); // check if username is a 10-digit phone number
           if (isValidEmail || isValidPhone) {
             if (password_validation(password)) {
-              await axios.post("https://localhost:5000/login", { username });
-              axios
-                .get("https://localhost:5000/login")
-                .then((resp) => setData(resp.data.message));
+              await signInWithEmailAndPassword(auth, username, password)
+              await console.log(auth.currentUser.uid)
+              navigate("/home")
             } else {
               setData("Invalid password. Please try again.");
             }

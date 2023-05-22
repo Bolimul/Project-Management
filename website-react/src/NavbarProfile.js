@@ -156,10 +156,10 @@ class NavbarProfile extends Component {
                         <Link to="/" onClick={()=>this.setState({nS: 0})}>Home</Link>
                       </li>
                       <li>
-                      <Link to="/posts"onClick={()=>this.setState({nS: 1})}>Posts</Link>
+                      <Link to="/savedPosts"onClick={()=>this.setState({nS: 1})}>Posts</Link>
                       </li>
                       <li>
-                      <Link to="/analitycs"onClick={()=>this.setState({nS: 1})}>Analytics</Link>
+                      <Link to="/analytics"onClick={()=>this.setState({nS: 1})}>Analytics</Link>
                       </li>
                       <li>
                       <Link to="/personalInfo"onClick={()=>this.setState({nS: 1})}>Info</Link>

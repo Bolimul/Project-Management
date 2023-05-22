@@ -1,21 +1,41 @@
 import {useState} from "react";
 import "./PersonalInfo.css";
+import {db} from "./firebase";
+import { doc, getDocs, collection, query, where } from "firebase/firestore";
+import {auth} from "./firebase"
 var ExampleAccount = {
     image: "https://upload.wikimedia.org/wikipedia/en/c/cc/Wojak_cropped.jpg",
-    firstName: "Sam",
-    lastName: "Rogers",
-    spec: "Chemistry",
-    bio: "I'm a student",
-    phoneNum: "+1234567890",
-    pQuestion:"How do you do?",
-    pAnswer: "Fine",
-    email: "samrog@gmail.com",
-    status: "Student"
+    firstName: "",
+    lastName: "",
+    spec: "",
+    bio: "",
+    phoneNum: "",
+    pQuestion:"",
+    pAnswer: "",
+    email: "",
+    status: ""
 }
 
+const useEffect = async()=>{
+    const ref = await collection(db, "users-profile-data")
+    const q = await query(ref, where("UserId", "==", auth.currentUser.uid))
+    const data = await getDocs(q)
+    const user = await data.docs.map((doc) => ({...doc.data(), id: doc.id,}))[0];
+    ExampleAccount.firstName = user.FirstName;
+    ExampleAccount.lastName = user.LastName;
+    ExampleAccount.spec = user.Specialty;
+    ExampleAccount.bio = user.BioInfo;
+    ExampleAccount.phoneNum = user.PhoneNumber;
+    ExampleAccount.pQuestion = user.PQuestion;
+    ExampleAccount.pAnswer = user.AnswerToQ;
+    ExampleAccount.email = user.Email;
+    ExampleAccount.status = user.UserType;
+}
 
 export const PersonalInfo = (props) =>
 {
+    useEffect()
+
     const [fName, setFirstName] = useState(ExampleAccount.firstName)
     const [lName, setLastName] = useState(ExampleAccount.lastName)
     const [pS, setPStatus] = useState(ExampleAccount.pStatus)
@@ -45,7 +65,7 @@ export const PersonalInfo = (props) =>
                 <p>Last name: {ExampleAccount.lastName}</p>
                 <p>Status: {ExampleAccount.spec}</p>
                 <p>Bio: {ExampleAccount.bio}</p>
-                <p>Speciality: {ExampleAccount.spec}</p>
+                <p>Speciality: {ExampleAccount.status}</p>
                 <p>Personal question: {ExampleAccount.pQuestion}</p>
                 <p>Personal Answer: {ExampleAccount.pAnswer}</p>
                 <p>Email: {ExampleAccount.email}</p>

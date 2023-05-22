@@ -5,6 +5,7 @@ import "./App";
 import Home from "./Home";
 import NavbarProfile from "./NavbarProfile";
 import NavbarStart from "./NavbarStart"
+import {auth} from "./firebase";
 
 class NavBar_Signed extends Component {
   constructor(props)
@@ -171,7 +172,7 @@ class NavBar_Signed extends Component {
                     <Link to="/Blog"onClick={()=>this.setState({nS: 0})}>Blog</Link>
                   </li>
                   <li>
-                    <Link to="/Sign out"onClick={()=>this.setState({nS: 2})}>Sign out</Link>
+                    <Link to="/SignOut"onClick={()=>{auth.signOut().then(()=>{this.setState({nS: 2})}).then(()=>console.log(auth.currentUser))}}>Sign out</Link>
                   </li>
                   <li>
                     <Link to="/Mode">Mode</Link>
