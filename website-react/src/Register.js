@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {auth, db} from "./firebase";
+import {auth, db, storage} from "./firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const countries = [
     "Australia",
@@ -100,6 +101,9 @@ export const Register = (props) => {
     await createUserWithEmailAndPassword(auth, email, "abc234!").then((userCredential) => {
       userId = userCredential.user.uid
     })
+    const IR = ref(storage, "profileImages/" + userId);
+    const imageRef = await uploadBytes(IR, image).then((snapshot) => getDownloadURL(snapshot.ref))
+
     const data = {
       FirstName: firstName,
       LastName: lastName,
@@ -121,7 +125,8 @@ export const Register = (props) => {
       PhoneNumber: phoneNumber,
       PQuestion: personalQuestion,
       AnswerToQ: answer,
-      UserId: userId
+      UserId: userId,
+      ImageRef: imageRef
     }
     const colRef = collection(db, "users-profile-data")
     await addDoc(colRef, data)
