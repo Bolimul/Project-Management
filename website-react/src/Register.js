@@ -80,6 +80,7 @@ export const Register = (props) => {
   const [personalQuestion, setPersonalQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [image, setImage] = useState(null);
+  const [password, setPassword] = useState("")
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -98,9 +99,9 @@ export const Register = (props) => {
       image,
     });
     var userId = ""
-    await createUserWithEmailAndPassword(auth, email, "abc234!").then((userCredential) => {
+    await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
       userId = userCredential.user.uid
-    })
+    }).then(() => {alert("The user has been registered to the system")})
     const IR = ref(storage, "profileImages/" + userId);
     const imageRef = await uploadBytes(IR, image).then((snapshot) => getDownloadURL(snapshot.ref))
 
@@ -394,6 +395,16 @@ export const Register = (props) => {
             onChange={(e) => setImage(e.target.files[0])}
             id="image"
             name="image"
+        />
+
+        <label htmlFor="password">Password</label>
+        <input
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          type="tel"
+          placeholder="Enter your password here"
+          id="password"
+          name="password"
         />
         <button type = "submit">Log In</button>
             </form>

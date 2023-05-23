@@ -28,7 +28,7 @@ export const Login = (props) => {
           let isValidPhone = /^\d{10}$/.test(username); // check if username is a 10-digit phone number
           if (isValidEmail || isValidPhone) {
             if (password_validation(password)) {
-              await signInWithEmailAndPassword(auth, username, password)
+              await signInWithEmailAndPassword(auth, username, password).then(() => {alert("The user has been logged in")})
               await console.log(auth.currentUser.uid)
               navigate("/home")
             } else {
