@@ -6,32 +6,7 @@ const AddPostHome = () => {
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState('');
-  const [posts, setPosts] = useState([
-    {
-      id: '1',
-      userName: 'Dr Lebron James',
-      text: 'Hello World!',
-      likes: 0,
-      shares: true,
-      followed: false,
-    },
-    {
-      id: '2',
-      userName: 'Dr Steph Curry',
-      text: 'Splash.',
-      likes: 2,
-      shares: false,
-      followed: true,
-    },
-    {
-      id: '3',
-      userName: 'Dr Jayson Tatum',
-      text: 'Lets gooo!',
-      likes: 3,
-      shares: false,
-      followed: true,
-    },
-  ]);
+  const [posts, setPosts] = useState([]);
 
   const [likedPosts, setLikedPosts] = useState([]); // New state variable to keep track of liked posts
 
@@ -109,15 +84,24 @@ const AddPostHome = () => {
     }
   };
 
-  const handleShare = (postId) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === postId
-          ? { ...post, shares: post.shares + (post.shared ? -1 : 1), shared: !post.shared }
-          : post
-      )
-    );
-  };
+const handleShare = (postId) => {
+  const originalPost = posts.find((post) => post.id === postId);
+
+  if (originalPost) {
+    const sharedPost = {
+      id: Date.now(),
+      text: originalPost.text,
+      userName: originalPost.userName,
+      image: originalPost.image,
+      textColor: originalPost.textColor,
+      likes: originalPost.likes,
+      shares: 0,
+      followed: originalPost.followed,
+    };
+
+    setPosts((prevPosts) => [sharedPost, ...prevPosts]);
+  }
+};
 
   const handleSave = async (postId) => {
     setPosts((prevPosts) =>
