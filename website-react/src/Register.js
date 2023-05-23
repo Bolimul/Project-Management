@@ -80,7 +80,8 @@ export const Register = (props) => {
   const [personalQuestion, setPersonalQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [image, setImage] = useState(null);
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -127,7 +128,8 @@ export const Register = (props) => {
       PQuestion: personalQuestion,
       AnswerToQ: answer,
       UserId: userId,
-      ImageRef: imageRef
+      ImageRef: imageRef,
+      UserName: username
     }
     const colRef = collection(db, "users-profile-data")
     await addDoc(colRef, data)
@@ -401,10 +403,20 @@ export const Register = (props) => {
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          type="tel"
+          type="text"
           placeholder="Enter your password here"
           id="password"
           name="password"
+        />
+
+        <label htmlFor="password">Username</label>
+        <input
+          value={username}
+          onChange={(e) => setPassword(e.target.value)}
+          type="text"
+          placeholder="Enter your username here"
+          id="username"
+          name="username"
         />
         <button type = "submit">Log In</button>
             </form>
