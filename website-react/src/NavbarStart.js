@@ -21,7 +21,7 @@ class NavbarStart extends Component {
     switch(this.state.nS)
     {
       case 0:
-        return <NavBar_Signed/>
+        return <NavBar_Signed />
       case 2:
             return (
                 <>

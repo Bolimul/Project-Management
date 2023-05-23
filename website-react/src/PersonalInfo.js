@@ -185,31 +185,27 @@ export const PersonalInfo = (props) =>
         const newDocs = await getDocs(q)
         const docRef = newDocs.docs[0].ref
         await updateDoc(docRef, data).then(() => {alert("Data has been updated")})
-        const user = await data.docs.map((doc) => ({...doc.data(), id: doc.id,}))[0];
-        ExampleAccount.firstName = user.FirstName;
-        ExampleAccount.lastName = user.LastName;
-        ExampleAccount.spec = user.Specialty;
-        ExampleAccount.bio = user.BioInfo;
-        ExampleAccount.phoneNum = user.PhoneNumber;
-        ExampleAccount.pQuestion = user.PQuestion;
-        ExampleAccount.pAnswer = user.AnswerToQ;
-        ExampleAccount.email = user.Email;
-        ExampleAccount.status = user.UserType;
-        ExampleAccount.city = user.City;
-        ExampleAccount.country = user.Country;
-        ExampleAccount.gender = user.Gender;
-        ExampleAccount.licenceNumber = user.LicenceNumber;
-        ExampleAccount.workplaceName = user.WorkplaceName;
-        ExampleAccount.nameCEO = user.nameCEO;
-        ExampleAccount.organisationName = user.organisationName;
-        ExampleAccount.organisationAddress = user.organisationAddress;
-        ExampleAccount.organisationPhone = user.organisationPhone;
-        ExampleAccount.studentNumber = user.studentNumber;
-        ExampleAccount.universityName = user.universityName;
-        ExampleAccount.image = user.ImageRef;
+        setFirstName(data.FirstName)
+        setLastName(data.LastName)
+        setCountry(data.Country)
+        setCity(data.City)
+        setSpecialty(data.Specialty)
+        setUserType(data.UserType)
+        setEmail(data.Email)
+        setWorkplaceName(data.WorkplaceName)
+        setLicenseNumber(data.LicenseNumber)
+        setOrganizationName(data.organizationName)
+        setOrganizationAdress(data.organizationAddress)
+        setOrganizationPhone(data.organizationPhone)
+        setStudentNumber(data.studentNumber)
+        setUniversityName(data.universityName)
+        setNameCEO(data.NameCEO)
+        setGender(data.Gender)
+        setBioInfo(data.BioInfo)
+        setPhoneNumber(data.PhoneNumber)
+        setPersonalQuestion(data.PQuestion)
+        setAnswer(data.AnswerToQ)
     }
-    if(ExampleAccount.status === "Student")
-    {
         return(
             <div>
                 <div>
@@ -453,7 +449,6 @@ export const PersonalInfo = (props) =>
                 <button type="submit" onClick={handleSubmit}>Submit Button</button>
                 </div>
             );
-    }
     
 }
 
