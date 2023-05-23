@@ -164,6 +164,9 @@ class NavbarProfile extends Component {
                       <li>
                       <Link to="/personalInfo"onClick={()=>this.setState({nS: 1})}>Info</Link>
                       </li>
+                      <li>
+                      <Link to="/following_users"onClick={()=>this.setState({nS: 1})}>Following Users</Link>
+                      </li>
                       </ul>
                     </div>
                     <div id="mobile" onClick={this.handleClick}>

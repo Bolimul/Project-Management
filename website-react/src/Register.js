@@ -409,10 +409,10 @@ export const Register = (props) => {
           name="password"
         />
 
-        <label htmlFor="password">Username</label>
+        <label htmlFor="username">Username</label>
         <input
           value={username}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           type="text"
           placeholder="Enter your username here"
           id="username"

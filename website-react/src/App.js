@@ -16,6 +16,7 @@ import PersonalInfo from "./PersonalInfo";
 import NavbarStart from "./NavbarStart";
 import StatisticalInfo from "./StatisticalInfo";
 import {auth} from "./firebase";
+import FollowingUsers from "./FollowingUsers";
 
 
 
@@ -41,6 +42,7 @@ export default function App() {
             <Route path="/friends" element={<FriendsPage />}/>
             <Route path="/savedPosts" element={<PersonalAreaPostsSaved />}/>
             <Route path="/analytics" element={<StatisticalInfo/>}/>
+            <Route path="following_users" element={<FollowingUsers/>}/>
         </Routes>
       </BrowserRouter>
     </div>
