@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import './FriendSearch.css'; // Import the CSS file
+import React, { useState } from "react";
+import "./FriendSearch.css"; // Import the CSS file
 import { db } from "./firebase";
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from "firebase/firestore";
 
 const FriendSearch = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
   const [isFriendListOpen, setIsFriendListOpen] = useState(false);
 
   const handleSearch = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'users-profile-data'));
+      const colRef = collection(db, "users-profile-data");
+      const querySnapshot = await getDocs(colRef);
 
       const existingPeople = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -22,56 +23,58 @@ const FriendSearch = () => {
 
       // Perform the search based on the search query
       const searchResults = existingPeople.filter((person) => {
-        const fullName = `${person.firstName} ${person.lastName}`;
+        const fullName = `${person.FirstName} ${person.LastName}`;
         const search = searchQuery.toLowerCase();
 
         // Search by first name or last name
         return (
-          person.firstName.toLowerCase().includes(search) ||
-          person.lastName.toLowerCase().includes(search)
+          person.FirstName.toLowerCase().includes(search) ||
+          person.LastName.toLowerCase().includes(search)
         );
       });
 
       // Set the searchResults state with the matching results
       setSearchResults(searchResults);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
     }
   };
 
   const handleAddFriend = async (person) => {
-    const { firstName, lastName } = person;
+    const { FirstName, LastName } = person;
 
     // Check if the entered first name and last name are valid
     const nameRegex = /^[a-zA-Z]+$/;
-    if (!firstName.match(nameRegex) || !lastName.match(nameRegex)) {
-      alert('Please enter a valid first and last name (only letters are allowed).');
+    if (!FirstName.match(nameRegex) || !LastName.match(nameRegex)) {
+      alert(
+        "Please enter a valid first and last name (only letters are allowed)."
+      );
       return;
     }
 
     try {
       // Check if the person already exists in the friends list
       const friendsQuerySnapshot = await db
-        .collection('friends')
-        .where('firstName', '==', firstName)
-        .where('lastName', '==', lastName)
+        .collection("users-profile-data")
+        .where("FirstName", "==", FirstName)
+        .where("LastName", "==", LastName)
         .get();
 
       if (!friendsQuerySnapshot.empty) {
-        alert('This person is already in your friends list.');
+        alert("This person is already in your friends list.");
         return;
       }
 
       // Add the person to the friends collection
-      await db.collection('friends').add({
-        firstName,
-        lastName,
+      const newFriendRef = await db.collection("friends").add({
+        FirstName,
+        LastName,
       });
 
       // Add the person to the friends list
-      setFriendsList((prevFriendsList) => [...prevFriendsList, person]);
+      setFriendsList((prevFriendsList) => [...prevFriendsList, person]); //The prevFriendsList variable is automatically provided by React's state management
     } catch (error) {
-      console.error('Error adding friend:', error);
+      console.error("Error adding friend:", error);
     }
   };
 
@@ -95,22 +98,24 @@ const FriendSearch = () => {
           <ul>
             {searchResults.map((person) => (
               <li key={person.id}>
-                {person.firstName} {person.lastName}
+                {person.FirstName} {person.LastName}
                 <button
                   className="add-friend-button"
                   onClick={() => handleAddFriend(person)}
                   disabled={friendsList.some(
                     (friend) =>
-                      friend.firstName === person.firstName && friend.lastName === person.lastName
+                      friend.FirstName === person.FirstName &&
+                      friend.LastName === person.LastName
                   )}
                 >
                   {friendsList.some(
                     (friend) =>
-                      friend.firstName === person.firstName && friend.lastName === person.lastName
+                      friend.FirstName === person.FirstName &&
+                      friend.LastName === person.LastName
                   ) ? (
                     <span>&#10003;</span>
                   ) : (
-                    'Add Friend'
+                    "Add Friend"
                   )}
                 </button>
               </li>
@@ -124,7 +129,7 @@ const FriendSearch = () => {
         <h2>
           Friends List
           <button onClick={toggleFriendList}>
-            {isFriendListOpen ? 'Close' : 'See'}
+            {isFriendListOpen ? "Close" : "See"}
           </button>
         </h2>
         {isFriendListOpen && (
@@ -133,7 +138,7 @@ const FriendSearch = () => {
               <ul>
                 {friendsList.map((friend) => (
                   <li key={friend.id}>
-                    {friend.firstName} {friend.lastName}
+                    {friend.FirstName} {friend.LastName}
                   </li>
                 ))}
               </ul>
