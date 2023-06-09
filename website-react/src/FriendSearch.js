@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import "./FriendSearch.css"; // Import the CSS file
 import { db } from "./firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 const FriendSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
   const [isFriendListOpen, setIsFriendListOpen] = useState(false);
+  const [error, setError] = useState(null); // New error state
 
   const handleSearch = async () => {
     try {
+      // Reset error state before each search
+      setError(null);
+
       const colRef = collection(db, "users-profile-data");
       const querySnapshot = await getDocs(colRef);
 
@@ -37,6 +41,9 @@ const FriendSearch = () => {
       setSearchResults(searchResults);
     } catch (error) {
       console.error("Error fetching users:", error);
+      setError(
+        "An error occurred while fetching users. Please try again later."
+      );
     }
   };
 
@@ -66,7 +73,7 @@ const FriendSearch = () => {
       }
 
       // Add the person to the friends collection
-      const newFriendRef = await db.collection("friends").add({
+      const newFriendRef = await db.collection("Friends").add({
         FirstName,
         LastName,
       });
@@ -92,6 +99,8 @@ const FriendSearch = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button onClick={handleSearch}>Search</button>
+        {error && <p className="error-message">{error}</p>}{" "}
+        {/* Render the error message */}
       </div>
       <div className="search-results">
         {searchResults.length > 0 ? (

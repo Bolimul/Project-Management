@@ -24,3 +24,11 @@
   padding: 0;
 }
 
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
+.error-message::before {
+  content: "X ";
+}
