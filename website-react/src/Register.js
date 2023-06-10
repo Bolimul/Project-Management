@@ -1,62 +1,60 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {auth, db, storage} from "./firebase";
+import { auth, db, storage } from "./firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const countries = [
-    "Australia",
-    "Brazil",
-    "Canada",
-    "China",
-    "France",
-    "Germany",
-    "India",
-    "Israel",
-    "Italy",
-    "Japan",
-    "Mexico",
-    "Russia",
-    "South Korea",
-    "Spain",
-    "United Kingdom",
-    "United States",
-
+  "Australia",
+  "Brazil",
+  "Canada",
+  "China",
+  "France",
+  "Germany",
+  "India",
+  "Israel",
+  "Italy",
+  "Japan",
+  "Mexico",
+  "Russia",
+  "South Korea",
+  "Spain",
+  "United Kingdom",
+  "United States",
 ];
 const specialties = [
-    "Allergy and Immunology",
-    "Anesthesiology",
-    "Cardiology",
-    "Dermatology",
-    "Endocrinology",
-    "Emergency Medicine",
-    "Family Medicine",
-    "Gastroenterology",
-    "Geriatrics",
-    "Hematology",
-    "Infectious Disease",
-    "Internal Medicine",
-    "Nephrology",
-    "Neurology",
-    "Obstetrics and Gynecology",
-    "Oncology",
-    "Ophthalmology",
-    "Orthopedics",
-    "Otolaryngology",
-    "Pathology",
-    "Pediatrics",
-    "Physical Medicine and Rehabilitation",
-    "Plastic Surgery",
-    "Psychiatry",
-    "Pulmonology",
-    "Radiology",
-    "Rheumatology",
-    "Sports Medicine",
-    "Surgery",
-    "Urology"
-  ];
-  
+  "Allergy and Immunology",
+  "Anesthesiology",
+  "Cardiology",
+  "Dermatology",
+  "Endocrinology",
+  "Emergency Medicine",
+  "Family Medicine",
+  "Gastroenterology",
+  "Geriatrics",
+  "Hematology",
+  "Infectious Disease",
+  "Internal Medicine",
+  "Nephrology",
+  "Neurology",
+  "Obstetrics and Gynecology",
+  "Oncology",
+  "Ophthalmology",
+  "Orthopedics",
+  "Otolaryngology",
+  "Pathology",
+  "Pediatrics",
+  "Physical Medicine and Rehabilitation",
+  "Plastic Surgery",
+  "Psychiatry",
+  "Pulmonology",
+  "Radiology",
+  "Rheumatology",
+  "Sports Medicine",
+  "Surgery",
+  "Urology",
+];
 
 export const Register = (props) => {
   const [firstName, setFirstName] = useState("");
@@ -83,7 +81,7 @@ export const Register = (props) => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log({
       firstName,
@@ -99,40 +97,48 @@ export const Register = (props) => {
       answer,
       image,
     });
-    var userId = ""
-    await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-      userId = userCredential.user.uid
-    }).then(() => {alert("The user has been registered to the system")})
+    var userId = "";
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        userId = userCredential.user.uid;
+      })
+      .then(() => {
+        alert("The user has been registered to the system");
+      });
     const IR = ref(storage, "profileImages/" + userId);
-    const imageRef = await uploadBytes(IR, image).then((snapshot) => getDownloadURL(snapshot.ref))
+    const imageRef = await uploadBytes(IR, image).then((snapshot) =>
+      getDownloadURL(snapshot.ref)
+    );
 
     const data = {
-      FirstName: firstName,
-      LastName: lastName,
-      Country: country,
-      City: city,
-      Specialty: specialty,
-      UserType: userType,
-      Email: email,
-      WorkplaceName: workplaceName,
-      LicenseNumber: licenseNumber,
-      organizationName: OrganizationName,
-      organizationAddress: OrganizationAdress,
-      organizationPhone: OrganizationPhone,
-      studentNumber: StudentNumber,
-      universityName: UniversityName,
-      nameCEO: NameCEO,
-      Gender: gender,
-      BioInfo: bioInfo,
-      PhoneNumber: phoneNumber,
-      PQuestion: personalQuestion,
-      AnswerToQ: answer,
-      UserId: userId,
-      ImageRef: imageRef,
-      UserName: username
-    }
-    const colRef = collection(db, "users-profile-data")
-    await addDoc(colRef, data)
+      personalInfo: {
+        FirstName: firstName,
+        LastName: lastName,
+        Country: country,
+        City: city,
+        Specialty: specialty,
+        UserType: userType,
+        Email: email,
+        WorkplaceName: workplaceName,
+        LicenseNumber: licenseNumber,
+        organizationName: OrganizationName,
+        organizationAddress: OrganizationAdress,
+        organizationPhone: OrganizationPhone,
+        studentNumber: StudentNumber,
+        universityName: UniversityName,
+        nameCEO: NameCEO,
+        Gender: gender,
+        BioInfo: bioInfo,
+        PhoneNumber: phoneNumber,
+        PQuestion: personalQuestion,
+        AnswerToQ: answer,
+        UserId: userId,
+        ImageRef: imageRef,
+        UserName: username,
+      },
+    };
+    const colRef = collection(db, "users-profile-data");
+    await addDoc(colRef, data);
   };
 
   return (
@@ -184,7 +190,6 @@ export const Register = (props) => {
           maxLength={20}
         />
 
-
         <label htmlFor="specialty">Specialty</label>
         <select
           value={specialty}
@@ -208,7 +213,7 @@ export const Register = (props) => {
           name="user-type"
         >
           <option value="">Select user type</option>
-          {['Doctor','Student', 'Organization'].map((item) => (
+          {["Doctor", "Student", "Organization"].map((item) => (
             <option key={item} value={item}>
               {item}
             </option>
@@ -235,94 +240,126 @@ export const Register = (props) => {
           name="condition"
         /></> : <label htmlFor="condition">no condition</label>} */}
 
-        {(userType === 'Doctor') && <><label htmlFor="workplace-name">Workplace Name</label>
-         <input
-          value={workplaceName}
-          onChange={(e) => setWorkplaceName(e.target.value)}
-          type="condition"
-          placeholder="Enter your workplace name here"
-          id="workplaceName"
-          name="workplaceName"
-          maxLength={20} // Added maxlength attribute
-        /></>}
+        {userType === "Doctor" && (
+          <>
+            <label htmlFor="workplace-name">Workplace Name</label>
+            <input
+              value={workplaceName}
+              onChange={(e) => setWorkplaceName(e.target.value)}
+              type="condition"
+              placeholder="Enter your workplace name here"
+              id="workplaceName"
+              name="workplaceName"
+              maxLength={20} // Added maxlength attribute
+            />
+          </>
+        )}
 
-        {(userType === 'Doctor') && <><label htmlFor="license-number">License Number</label>
-         <input
-          value={licenseNumber}
-          onChange={(e) => setLicenseNumber(e.target.value)}
-          type="licenseNumber"
-          placeholder="Enter your license number here"
-          id="licenseNumber"
-          name="licenseNumber"
-          pattern="[0-9]*" // Added pattern attribute for numbers only
-        /></>}
+        {userType === "Doctor" && (
+          <>
+            <label htmlFor="license-number">License Number</label>
+            <input
+              value={licenseNumber}
+              onChange={(e) => setLicenseNumber(e.target.value)}
+              type="licenseNumber"
+              placeholder="Enter your license number here"
+              id="licenseNumber"
+              name="licenseNumber"
+              pattern="[0-9]*" // Added pattern attribute for numbers only
+            />
+          </>
+        )}
 
-        {(userType === 'Organization') && <><label htmlFor="Organization-Name">Organization Name</label>
-         <input
-          value={OrganizationName}
-          onChange={(e) => setOrganizationName(e.target.value)}
-          type="OrganizationName"
-          placeholder="Enter your organization name here"
-          id="OrganizationName"
-          name="OrganizationName"
-          maxLength={20} // Added maxlength attribute
-        /></>}
+        {userType === "Organization" && (
+          <>
+            <label htmlFor="Organization-Name">Organization Name</label>
+            <input
+              value={OrganizationName}
+              onChange={(e) => setOrganizationName(e.target.value)}
+              type="OrganizationName"
+              placeholder="Enter your organization name here"
+              id="OrganizationName"
+              name="OrganizationName"
+              maxLength={20} // Added maxlength attribute
+            />
+          </>
+        )}
 
-        {(userType === 'Organization') && <><label htmlFor="Organization-Adress">Organization Adress</label>
-         <input
-          value={OrganizationAdress}
-          onChange={(e) => setOrganizationAdress(e.target.value)}
-          type="OrganizationAdress"
-          placeholder="Enter your organization adress here"
-          id="OrganizationAdress"
-          name="OrganizationAdress"
-          maxLength={30} // Added maxlength attribute
-        /></>}
+        {userType === "Organization" && (
+          <>
+            <label htmlFor="Organization-Adress">Organization Adress</label>
+            <input
+              value={OrganizationAdress}
+              onChange={(e) => setOrganizationAdress(e.target.value)}
+              type="OrganizationAdress"
+              placeholder="Enter your organization adress here"
+              id="OrganizationAdress"
+              name="OrganizationAdress"
+              maxLength={30} // Added maxlength attribute
+            />
+          </>
+        )}
 
-        {(userType === 'Organization') && <><label htmlFor="Organization-Phone">Organization Phone</label>
-         <input
-          value={OrganizationPhone}
-          onChange={(e) => setOrganizationPhone(e.target.value)}
-          type="OrganizationPhone"
-          placeholder="Enter your organization phone here"
-          id="OrganizationPhone"
-          name="OrganizationPhone"
-          pattern="[0-9]{0,10}" // Added pattern attribute for numbers only and up to 10 digits
-          maxLength={10} // Added maxlength attribute for 10 digits limit
-        /></>}
+        {userType === "Organization" && (
+          <>
+            <label htmlFor="Organization-Phone">Organization Phone</label>
+            <input
+              value={OrganizationPhone}
+              onChange={(e) => setOrganizationPhone(e.target.value)}
+              type="OrganizationPhone"
+              placeholder="Enter your organization phone here"
+              id="OrganizationPhone"
+              name="OrganizationPhone"
+              pattern="[0-9]{0,10}" // Added pattern attribute for numbers only and up to 10 digits
+              maxLength={10} // Added maxlength attribute for 10 digits limit
+            />
+          </>
+        )}
 
-        {(userType === 'Organization') && <><label htmlFor="NameCEO">Name of CEO</label>
-         <input
-          value={NameCEO}
-          onChange={(e) => setNameCEO(e.target.value)}
-          type="NameCEO"
-          placeholder="Enter your name of CEO here"
-          id="NameCEO"
-          name="NameCEO"
-          maxLength={20} // Added maxlength attribute
-        /></>}
+        {userType === "Organization" && (
+          <>
+            <label htmlFor="NameCEO">Name of CEO</label>
+            <input
+              value={NameCEO}
+              onChange={(e) => setNameCEO(e.target.value)}
+              type="NameCEO"
+              placeholder="Enter your name of CEO here"
+              id="NameCEO"
+              name="NameCEO"
+              maxLength={20} // Added maxlength attribute
+            />
+          </>
+        )}
 
-        {(userType === 'Student') && <><label htmlFor="Student Number">Student Number</label>
-         <input
-          value={StudentNumber}
-          onChange={(e) => setStudentNumber(e.target.value)}
-          type="StudentNumber"
-          placeholder="Enter your student number here"
-          id="StudentNumber"
-          name="StudentNumber"
-          pattern="[0-9]{0,10}" // Added pattern attribute for numbers only and up to 10 digits
-        /></>}
+        {userType === "Student" && (
+          <>
+            <label htmlFor="Student Number">Student Number</label>
+            <input
+              value={StudentNumber}
+              onChange={(e) => setStudentNumber(e.target.value)}
+              type="StudentNumber"
+              placeholder="Enter your student number here"
+              id="StudentNumber"
+              name="StudentNumber"
+              pattern="[0-9]{0,10}" // Added pattern attribute for numbers only and up to 10 digits
+            />
+          </>
+        )}
 
-        {(userType === 'Student') && <><label htmlFor="University Name">University Name</label>
-         <input
-          value={UniversityName}
-          onChange={(e) => setUniversityName(e.target.value)}
-          type="UniversityName"
-          placeholder="Enter your university name here"
-          id="UniversityName"
-          name="UniversityName"
-          maxLength={20} // Added maxlength attribute
-        /></>}
+        {userType === "Student" && (
+          <>
+            <label htmlFor="University Name">University Name</label>
+            <input
+              value={UniversityName}
+              onChange={(e) => setUniversityName(e.target.value)}
+              type="UniversityName"
+              placeholder="Enter your university name here"
+              id="UniversityName"
+              name="UniversityName"
+              maxLength={20} // Added maxlength attribute
+            />
+          </>
+        )}
 
         <label htmlFor="email">Email</label>
         <input
@@ -334,13 +371,16 @@ export const Register = (props) => {
           name="email"
         />
 
-
-
         <label htmlFor="gender">Gender</label>
-        <select value={gender} onChange={(e) => setGender(e.target.value)} id="gender" name="gender">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
+        <select
+          value={gender}
+          onChange={(e) => setGender(e.target.value)}
+          id="gender"
+          name="gender"
+        >
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
         </select>
         <label htmlFor="bioInfo">Bio Info</label>
         <textarea
@@ -351,7 +391,7 @@ export const Register = (props) => {
           name="bioInfo"
           maxLength={100}
         />
-         <label htmlFor="phoneNumber">Phone Number</label>
+        <label htmlFor="phoneNumber">Phone Number</label>
         <input
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
@@ -381,22 +421,22 @@ export const Register = (props) => {
           </option>
         </select>
         <input
-            value = {answer}
-            onChange={(e) => setAnswer(e.target.value)}
-            type="text"
-            placeholder="Answer to Personal Question"
-            id="answer"
-            name="answer"
-            maxLength={20}
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+          type="text"
+          placeholder="Answer to Personal Question"
+          id="answer"
+          name="answer"
+          maxLength={20}
         />
 
         <label htmlFor="image">Image</label>
         <input
-            type="file"
-            accept=".png,.jpg,.jpeg"
-            onChange={(e) => setImage(e.target.files[0])}
-            id="image"
-            name="image"
+          type="file"
+          accept=".png,.jpg,.jpeg"
+          onChange={(e) => setImage(e.target.files[0])}
+          id="image"
+          name="image"
         />
 
         <label htmlFor="password">Password</label>
@@ -418,15 +458,16 @@ export const Register = (props) => {
           id="username"
           name="username"
         />
-        <button type = "submit">Log In</button>
-            </form>
-            
-            <Link to="/login"><button className = "link-btn">Already have an account? Log in here.</button></Link>
-        </div>
-    );
-}
+        <button type="submit">Log In</button>
+      </form>
+
+      <Link to="/login">
+        <button className="link-btn">
+          Already have an account? Log in here.
+        </button>
+      </Link>
+    </div>
+  );
+};
 
 export default Register;
-
-
-
