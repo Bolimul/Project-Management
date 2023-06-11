@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {auth, db, storage} from "./firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, setDoc,doc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const countries = [
@@ -107,6 +107,12 @@ export const Register = (props) => {
     const imageRef = await uploadBytes(IR, image).then((snapshot) => getDownloadURL(snapshot.ref))
 
     const data = {
+      Followers: [],
+      LikedPosts: [],
+      friends: [],
+      meetings: [],
+      myposts:[],
+      personalInfo: {
       FirstName: firstName,
       LastName: lastName,
       Country: country,
@@ -130,9 +136,13 @@ export const Register = (props) => {
       UserId: userId,
       ImageRef: imageRef,
       UserName: username
-    }
-    const colRef = collection(db, "users-profile-data")
-    await addDoc(colRef, data)
+      },
+      savedPosts: []
+    };
+    //const colRef = collection(db, "users-profile-data")
+    //await addDoc(colRef, data)
+
+    setDoc(doc(db, "users-profile-data", auth.currentUser.uid),data);
   };
 
   return (
