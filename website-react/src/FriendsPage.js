@@ -1,33 +1,49 @@
-import React from 'react';
-import './FriendsPage.css';
-
+import React, { useEffect, useState } from "react";
+import { db, auth } from "./firebase";
+import { doc, getDoc } from "firebase/firestore";
+import "./FriendSearch.css";
 
 const FriendsPage = () => {
-  // Existing list of friends
-  const friendsList = [
-      { id: 1, firstName: 'Maya', lastName: 'Rozenberg'},
-      { id: 2, firstName: 'Anna', lastName: 'Sol'},
-      { id: 3, firstName: 'Netanel', lastName: 'Fadlon'},
-    // Add more friends to the list as needed
-  ];
+  const [friendsList, setFriendsList] = useState([]);
+  const [isFriendListOpen, setIsFriendListOpen] = useState(false);
+
+  useEffect(() => {
+    fetchFriends();
+  }, []);
+
+  const fetchFriends = async () => {
+    try {
+      const docRef = doc(db, "users-profile-data", auth.currentUser.uid);
+      const docSnap = await getDoc(docRef);
+      const friends = docSnap.data()?.friends || [];
+      setFriendsList(friends);
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    }
+  };
 
   return (
-    <div>
-      <h1>Friends</h1>
-      {friendsList.length > 0 ? (
+    <div className="FriendSearch">
+      <div className="FriendsList">
+        <h2>My Friends</h2>
         <ul>
           {friendsList.map((friend) => (
             <li key={friend.id}>
-              <button>{`${friend.firstName} ${friend.lastName}`}</button>
+              {friend.profilePicture && (
+                <img
+                  src={friend.profilePicture}
+                  alt={`${friend.fullName}'s profile picture`}
+                />
+              )}
+              <span>
+                {friend.FirstName} {friend.LastName}
+              </span>
             </li>
           ))}
         </ul>
-      ) : (
-        <p>No friends added yet.</p>
-      )}
+      </div>
     </div>
   );
 };
-
 
 export default FriendsPage;
