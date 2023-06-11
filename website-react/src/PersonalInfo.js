@@ -80,11 +80,12 @@ const specialties = [
   ];
 
 
-const useEffect = async()=>{
-    const ref = await collection(db, "users-profile-data")
-    const q = await query(ref, where("UserId", "==", auth.currentUser.uid))
+const getData = async()=>{
+    const ref = await doc(db, "users-profile-data",auth.currentUser.uid)
     const data = await getDocs(q)
-    const user = await data.docs.map((doc) => ({...doc.data(), id: doc.id,}))[0];
+    const user = onsnapshot(ref,async(doc)=>{
+        setFirstName(await doc.data().personalInfo.FirstName);
+    })
     ExampleAccount.firstName = user.FirstName;
     ExampleAccount.lastName = user.LastName;
     ExampleAccount.spec = user.Specialty;
