@@ -111,35 +111,45 @@ export const Register = (props) => {
     );
 
     const data = {
+
+      Followers: [],
+      LikedPosts: [],
+      friends: [],
+      meetings: [],
+      myposts:[],
       personalInfo: {
-        FirstName: firstName,
-        LastName: lastName,
-        Country: country,
-        City: city,
-        Specialty: specialty,
-        UserType: userType,
-        Email: email,
-        WorkplaceName: workplaceName,
-        LicenseNumber: licenseNumber,
-        organizationName: OrganizationName,
-        organizationAddress: OrganizationAdress,
-        organizationPhone: OrganizationPhone,
-        studentNumber: StudentNumber,
-        universityName: UniversityName,
-        nameCEO: NameCEO,
-        Gender: gender,
-        BioInfo: bioInfo,
-        PhoneNumber: phoneNumber,
-        PQuestion: personalQuestion,
-        AnswerToQ: answer,
-        UserId: userId,
-        ImageRef: imageRef,
-        UserName: username,
+      FirstName: firstName,
+      LastName: lastName,
+      Country: country,
+      City: city,
+      Specialty: specialty,
+      UserType: userType,
+      Email: email,
+      WorkplaceName: workplaceName,
+      LicenseNumber: licenseNumber,
+      organizationName: OrganizationName,
+      organizationAddress: OrganizationAdress,
+      organizationPhone: OrganizationPhone,
+      studentNumber: StudentNumber,
+      universityName: UniversityName,
+      nameCEO: NameCEO,
+      Gender: gender,
+      BioInfo: bioInfo,
+      PhoneNumber: phoneNumber,
+      PQuestion: personalQuestion,
+      AnswerToQ: answer,
+      UserId: userId,
+      ImageRef: imageRef,
+      UserName: username
       },
+      savedPosts: []
     };
-    const colRef = collection(db, "users-profile-data");
-    //await addDoc(colRef, data);
-    setDoc(doc(db, "users-profile-data", auth.currentUser.uid), data);
+    //const colRef = collection(db, "users-profile-data")
+    //await addDoc(colRef, data)
+
+    setDoc(doc(db, "users-profile-data", auth.currentUser.uid),data);
+
+
   };
 
   return (
