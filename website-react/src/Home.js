@@ -1,9 +1,44 @@
-import React, { useState } from 'react';
-import AddPostHome from './AddPostHome';
-import './HomeStyle.css';
+import React, { useState, useEffect } from "react";
+import { db, auth } from "./firebase";
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+} from "firebase/firestore";
+import AddPostHome from "./AddPostHome";
+import "./HomeStyle.css";
 
 const Home = () => {
   const [allPosts, setAllPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const postsCollection = collection(
+          db,
+          "users-profile-data",
+          auth.currentUser.uid,
+          "myPosts"
+        );
+        const q = query(postsCollection, orderBy("likes", "desc"), limit(10));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          const posts = snapshot.docs.map((doc) => doc.data());
+          setAllPosts(posts);
+          console.log(allPosts);
+        });
+
+        return unsubscribe;
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    if (auth.currentUser) {
+      fetchPosts();
+    }
+  }, []);
 
   const handleShare = (postId) => {
     const postToShare = allPosts.find((post) => post.id === postId);
@@ -11,7 +46,7 @@ const Home = () => {
       const sharedPost = {
         id: Date.now(),
         text: postToShare.text,
-        userName: 'Shared from: ' + postToShare.userName,
+        userName: "Shared from: " + postToShare.userName,
         likes: 0,
         shares: 0,
         saved: false,
@@ -37,16 +72,29 @@ const Home = () => {
     );
   };
 
-  const handlePost = (postText, userName) => {
-    const newPost = {
-      id: Date.now(),
-      text: postText,
-      userName: userName,
-      likes: 0,
-      shares: 0,
-      saved: false,
-    };
-    setAllPosts((prevPosts) => [newPost, ...prevPosts]);
+  const handlePost = async (postText, userName) => {
+    try {
+      const post = {
+        id: Date.now(),
+        text: postText,
+        userName: userName,
+        likes: 0,
+        shares: 0,
+        saved: false,
+      };
+
+      const docRef = collection(
+        db,
+        "users-profile-data",
+        auth.currentUser.uid,
+        "myPosts"
+      );
+      await db.doc(docRef, String(post.id)).set(post);
+
+      setAllPosts((prevPosts) => [post, ...prevPosts]);
+    } catch (error) {
+      console.error("Error posting:", error);
+    }
   };
 
   return (
@@ -56,21 +104,30 @@ const Home = () => {
       {allPosts.length > 0 && (
         <div className="post-list">
           {allPosts.map((post) => (
-            <div className={`post-container${post.shared ? ' shared' : ''}`} key={post.id}>
+            <div
+              className={`post-container${post.shared ? " shared" : ""}`}
+              key={post.id}
+            >
               <h3>{post.userName}</h3>
               <p>{post.text}</p>
               <div className="post-actions">
-                <button className="like-button" onClick={() => handleLike(post.id)}>
+                <button
+                  className="like-button"
+                  onClick={() => handleLike(post.id)}
+                >
                   Like ({post.likes})
                 </button>
-                <button className="share-button" onClick={() => handleShare(post.id)}>
+                <button
+                  className="share-button"
+                  onClick={() => handleShare(post.id)}
+                >
                   Share ({post.shares})
                 </button>
                 <button
-                  className={`save-button${post.saved ? ' saved' : ''}`}
+                  className={`save-button${post.saved ? " saved" : ""}`}
                   onClick={() => handleSave(post.id)}
                 >
-                  {post.saved ? 'Saved' : 'Save'}
+                  {post.saved ? "Saved" : "Save"}
                 </button>
               </div>
             </div>
@@ -82,4 +139,3 @@ const Home = () => {
 };
 
 export default Home;
-
