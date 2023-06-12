@@ -1,0 +1,30 @@
+
+
+.Saved-Posts {
+    display: flex;
+    /* justify-content: space-between; */
+    margin: 20px;
+    background-color: #E4E9F7;
+  }
+
+  .Saved-Posts > div {
+    flex: 1;
+    margin-right: 10px; /* Adjust the spacing between the areas */
+  }
+  
+  .Saved-Posts h1 {
+    font-size: 34px;
+    text-align: left; /* Align the title to the left */
+    font-weight: bold;
+    margin-bottom: 14px;
+    font-family: "Arial", sans-serif;
+    color: #000000;
+  }
+  
+  .Saved-Posts h2 {
+    font-size: 22px;
+    text-align: left; /* Align the title to the left */
+    margin-bottom: 12px;
+    font-family: "Arial", sans-serif;
+    color: #445566;
+  }

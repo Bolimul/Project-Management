@@ -1,39 +1,43 @@
-
 .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  text-align: center;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 60px;
   font-weight: bold;
   margin-bottom: 20px;
+  text-align: center;
+  top: 130px;
 }
 
 .friend-list {
   list-style-type: none;
   padding: 0;
+  text-align: center;
 }
 
 .friend-item {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
 .friend-name {
   margin-left: 10px;
+  text-align: center;
 }
 
 .friend-link {
   color: blue;
   text-decoration: underline;
   cursor: pointer;
+  text-align: center;
 }
 
 .friend-link:hover {
   text-decoration: none;
 }
-
-

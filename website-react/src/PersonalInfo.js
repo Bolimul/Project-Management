@@ -446,10 +446,11 @@ export const PersonalInfo = (props) =>
                     </>
                 }
                 </form>
-                <button type="submit" onClick={handleSubmit}>Submit Button</button>
+                <button type="submit" onClick={handleSubmit}>Submit</button>
                 </div>
             );
     
 }
+
 
 export default PersonalInfo;

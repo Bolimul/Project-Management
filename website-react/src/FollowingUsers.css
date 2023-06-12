@@ -1,0 +1,44 @@
+/* Center the content vertically and horizontally */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  /* Style for the title */
+  .title {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    /* Add the following styles */
+    position: absolute;
+    top: 130px;
+  }
+  
+  /* Style for the list */
+  .list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Style for each list item */
+  .list li {
+    margin-bottom: 10px;
+  }
+  
+  /* Style for the button */
+  .list li button {
+    padding: 10px 20px;
+    background-color: #ffb8c6;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Hover effect for the button */
+  .list li button:hover {
+    background-color: #9bd5a5;
+  }

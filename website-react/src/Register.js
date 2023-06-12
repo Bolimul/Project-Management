@@ -418,7 +418,7 @@ export const Register = (props) => {
           id="username"
           name="username"
         />
-        <button type = "submit">Log In</button>
+        <button type = "submit">Register</button>
             </form>
             
             <Link to="/login"><button className = "link-btn">Already have an account? Log in here.</button></Link>

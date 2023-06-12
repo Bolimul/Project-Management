@@ -8,7 +8,9 @@
   background: linear-gradient(79deg, #b65cff, #6a11cb);
 }
 
-.auth-form-container, .login-form, .register-form {
+.auth-form-container,
+.login-form,
+.register-form {
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -18,6 +20,11 @@
   margin: 0.5rem;
   max-width: 500px;
   width: 100%;
+  margin: auto; /* Center the form container */
+}
+
+.register-form {
+  margin: auto; /* Center the registration block */
 }
 
 label {
