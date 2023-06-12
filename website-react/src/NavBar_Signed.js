@@ -1,19 +1,18 @@
 import { Component } from "react";
-import { Outlet, Link} from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import "./NavBarStyleSign.css";
 import "./App";
 import Home from "./Home";
 import NavbarProfile from "./NavbarProfile";
-import NavbarStart from "./NavbarStart"
-import {auth} from "./firebase";
+import NavbarStart from "./NavbarStart";
+import { auth } from "./firebase";
 
 class NavBar_Signed extends Component {
-  constructor(props)
-  {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      nS: 0
-    }
+      nS: 0,
+    };
   }
   state = { clicked: false };
   handleClick = () => {
@@ -21,12 +20,11 @@ class NavBar_Signed extends Component {
   };
   render() {
     let component = null;
-    switch(this.state.nS)
-    {
+    switch (this.state.nS) {
       case 2:
-        return <NavbarStart/>
+        return <NavbarStart />;
       case 1:
-        return <NavbarProfile/>
+        return <NavbarProfile />;
       case 0:
         return (
           <>
@@ -154,25 +152,68 @@ class NavBar_Signed extends Component {
               <div>
                 <ul
                   id="NavBar_Signed"
-                  className={this.state.clicked ? "#NavBar_Signed avtive" : "#NavBar_Signed"}
+                  className={
+                    this.state.clicked
+                      ? "#NavBar_Signed avtive"
+                      : "#NavBar_Signed"
+                  }
                 >
                   <li>
-                    <Link to="/home" onClick={()=>this.setState({nS: 0})}>Home</Link>
+                    <Link
+                      to="/notification"
+                      onClick={() => this.setState({ nS: 0 })}
+                    >
+                      notification
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/profile"onClick={()=>this.setState({nS: 1})}>Profile</Link>
+                    <Link to="/home" onClick={() => this.setState({ nS: 0 })}>
+                      Home
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/friends"onClick={()=>this.setState({nS: 0})}>Friend</Link>
+                    <Link
+                      to="/profile"
+                      onClick={() => this.setState({ nS: 1 })}
+                    >
+                      Profile
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/Add Friend"onClick={()=>this.setState({nS: 0})}>Add Friend</Link>
+                    <Link
+                      to="/friends"
+                      onClick={() => this.setState({ nS: 0 })}
+                    >
+                      Friend
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/Blog"onClick={()=>this.setState({nS: 0})}>Blog</Link>
+                    <Link
+                      to="/Add Friend"
+                      onClick={() => this.setState({ nS: 0 })}
+                    >
+                      Add Friend
+                    </Link>
                   </li>
                   <li>
-                    <Link to="/SignOut"onClick={()=>{auth.signOut().then(()=>{this.setState({nS: 2})}).then(()=>console.log(auth.currentUser))}}>Sign out</Link>
+                    <Link to="/Blog" onClick={() => this.setState({ nS: 0 })}>
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/SignOut"
+                      onClick={() => {
+                        auth
+                          .signOut()
+                          .then(() => {
+                            this.setState({ nS: 2 });
+                          })
+                          .then(() => console.log(auth.currentUser));
+                      }}
+                    >
+                      Sign out
+                    </Link>
                   </li>
                   <li>
                     <Link to="/Mode">Mode</Link>
@@ -182,10 +223,11 @@ class NavBar_Signed extends Component {
               <div id="mobile" onClick={this.handleClick}>
                 <i
                   id="bar"
-                  className={this.state.clicked ? "fas fa-times" : "fas fa-bars"}
+                  className={
+                    this.state.clicked ? "fas fa-times" : "fas fa-bars"
+                  }
                 ></i>
               </div>
-              
             </nav>
           </>
         );
