@@ -1,45 +1,26 @@
-import React, { useState } from 'react';
-import './AddPostHome.css';
-import{auth} from './firebase';
-import 'firebase/auth';
-import { FieldValue, addDoc, arrayUnion, arrayRemove, doc, updateDoc } from 'firebase/firestore';
-import { useEffect } from 'react';
-import { db } from './firebase';
-import { collection, getDocs } from 'firebase/firestore';
-
+import React, { useState } from "react";
+import "./AddPostHome.css";
+import { auth } from "./firebase";
+import "firebase/auth";
+import {
+  FieldValue,
+  addDoc,
+  arrayUnion,
+  arrayRemove,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { useEffect } from "react";
+import { db } from "./firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 const AddPostHome = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
-  const [selectedTopic, setSelectedTopic] = useState('');
+  const [selectedTopic, setSelectedTopic] = useState("");
   const [myPosts, setMyPosts] = useState([]);
-  const [posts, setPosts] = useState([
-    {
-      id: '1',
-      userName: 'Dr Lebron James',
-      text: 'Hello World!',
-      likes: 0,
-      shares: true,
-      followed: false,
-    },
-    {
-      id: '2',
-      userName: 'Dr Steph Curry',
-      text: 'Splash.',
-      likes: 2,
-      shares: false,
-      followed: true,
-    },
-    {
-      id: '3',
-      userName: 'Dr Jayson Tatum',
-      text: 'Lets gooo!',
-      likes: 3,
-      shares: false,
-      followed: true,
-    },
-  ]);
+  const [posts, setPosts] = useState([]);
 
   const [likedPosts, setLikedPosts] = useState([]); // New state variable to keep track of liked posts
 
@@ -54,23 +35,23 @@ const AddPostHome = () => {
     setEditMode(false);
     setEditPostId(null);
   };
-  
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const docRef = doc(db, 'users-profile-data', '57zOm9K4wwYmD4yNCen6');
+        const docRef = doc(db, "users-profile-data", auth.currentUser.uid);
         const docSnap = await getDocs(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
           setMyPosts(data.myPosts || []); // Update the state with the fetched posts
         } else {
-          console.log('No such document!');
+          console.log("No such document!");
         }
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       }
     };
-  
+
     fetchPosts();
   }, []);
   const handlePost = async (postText, userName) => {
@@ -103,31 +84,36 @@ const AddPostHome = () => {
         saved: false,
         isFollowing: false,
       };
-  
+
       try {
         // Save the post to Firestore
-        const docRef = await updateDoc(doc(db, 'users-profile-data', "57zOm9K4wwYmD4yNCen6"), {myPosts: arrayUnion(newPost)});
-        console.log('Post added with ID: ', docRef.id);
+        const docRef = await updateDoc(
+          doc(db, "users-profile-data", auth.currentUser.uid),
+          { myPosts: arrayUnion(newPost) }
+        );
+        console.log("Post added with ID: ", docRef.id);
       } catch (error) {
-        console.error('Error adding post: ', error);
+        console.error("Error adding post: ", error);
       }
-  
+
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     }
-  
+
     handleFormClose();
   };
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'users-profile-data', '57zOm9K4wwYmD4yNCen6'));
+        const querySnapshot = await getDocs(
+          collection(db, "users-profile-data", auth.currentUser.uid)
+        );
         const posts = querySnapshot.docs.map((doc) => doc.data().myPosts);
         setMyPosts(posts);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       }
     };
-  
+
     fetchPosts();
   }, []);
 
@@ -145,17 +131,16 @@ const AddPostHome = () => {
 
   const handleDelete = async (postId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
-  
+
     try {
       // Remove the post from the 'myPosts' array in Firestore
-      const postRef = doc(db, 'users-profile-data', "57zOm9K4wwYmD4yNCen6");
-      await updateDoc(postRef, { 'myPosts': arrayRemove(postId) });
-      console.log('Post deleted:', postId);
+      const postRef = doc(db, "users-profile-data", auth.currentUser.uid);
+      await updateDoc(postRef, { myPosts: arrayRemove(postId) });
+      console.log("Post deleted:", postId);
     } catch (error) {
-      console.error('Error deleting post:', postId, error);
+      console.error("Error deleting post:", postId, error);
     }
   };
-  
 
   const handleLike = async (postId) => {
     if (!likedPosts.includes(postId)) {
@@ -165,14 +150,14 @@ const AddPostHome = () => {
         )
       );
       setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
-  
+
       try {
         // Update the liked posts array in Firestore
-        const postRef = doc(db, 'users-profile-data', "57zOm9K4wwYmD4yNCen6");
-        await updateDoc(postRef, { 'myPosts.like': arrayUnion(postId) });
-        console.log('Like added to post:', postId);
+        const postRef = doc(db, "users-profile-data", auth.currentUser.uid);
+        await updateDoc(postRef, { "myPosts.like": arrayUnion(postId) });
+        console.log("Like added to post:", postId);
       } catch (error) {
-        console.error('Error adding like to post:', postId, error);
+        console.error("Error adding like to post:", postId, error);
       }
     }
   };
@@ -181,7 +166,11 @@ const AddPostHome = () => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === postId
-          ? { ...post, shares: post.shares + (post.shared ? -1 : 1), shared: !post.shared }
+          ? {
+              ...post,
+              shares: post.shares + (post.shared ? -1 : 1),
+              shared: !post.shared,
+            }
           : post
       )
     );
@@ -193,24 +182,24 @@ const AddPostHome = () => {
         post.id === postId ? { ...post, saved: !post.saved } : post
       )
     );
-  
+
     // Save the post to the backend
     try {
-      const response = await fetch('/api/savePost', {
-        method: 'POST',
+      const response = await fetch("/api/savePost", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ postId }), // Send the post ID to the backend
       });
-  
+
       if (!response.ok) {
         // Handle error if the request was not successful
-        throw new Error('Failed to save the post');
+        throw new Error("Failed to save the post");
       }
-  
+
       // Post saved successfully
-      console.log('Post saved successfully');
+      console.log("Post saved successfully");
     } catch (error) {
       // Handle error
       console.error(error);
@@ -226,15 +215,15 @@ const AddPostHome = () => {
   };
 
   const getTopicFromPostText = (postText) => {
-    const topicEndIndex = postText.indexOf(':');
+    const topicEndIndex = postText.indexOf(":");
     if (topicEndIndex !== -1) {
       return postText.substring(0, topicEndIndex).trim();
     }
-    return '';
+    return "";
   };
 
-  const [postImage, setPostImage] = useState('');
-  const [textColor, setTextColor] = useState('#000000');
+  const [postImage, setPostImage] = useState("");
+  const [textColor, setTextColor] = useState("#000000");
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -253,7 +242,7 @@ const AddPostHome = () => {
             setPostImage(reader.result);
           } else {
             // Display a pop-up message or show an error state
-            alert('Picture is too big(1000 X 1000 max)');
+            alert("Picture is too big(1000 X 1000 max)");
           }
         };
       }
@@ -278,8 +267,8 @@ const AddPostHome = () => {
           onClose={handleFormClose}
           onPost={handlePost}
           editMode={editMode}
-          initialPostText={editMode && editPostId ? posts.text : ''}
-          initialUserName={editMode && editPostId ? posts.userName : ''}
+          initialPostText={editMode && editPostId ? posts.text : ""}
+          initialUserName={editMode && editPostId ? posts.userName : ""}
           selectedTopic={selectedTopic}
           onTopicChange={setSelectedTopic}
           postImage={postImage}
@@ -302,22 +291,24 @@ const AddPostHome = () => {
                     Like ({post.likes})
                   </button>
                   <button
-                   className={`share-button${post.shared ? ' shared' :""}`}
-                   onClick={() => handleShare(post.id)}
+                    className={`share-button${post.shared ? " shared" : ""}`}
+                    onClick={() => handleShare(post.id)}
                   >
-                    {post.shared ? 'Shared' : 'Share'} {post.shared && ''}
+                    {post.shared ? "Shared" : "Share"} {post.shared && ""}
                   </button>
                   <button
-                    className={`save-button${post.saved ? ' saved' : ''}`}
+                    className={`save-button${post.saved ? " saved" : ""}`}
                     onClick={() => handleSave(post.id)}
                   >
-                    {post.saved ? 'Saved' : 'Save'}
+                    {post.saved ? "Saved" : "Save"}
                   </button>
                   <button
-                    className={`follow-button${post.isFollowing ? ' following' : ''}`}
+                    className={`follow-button${
+                      post.isFollowing ? " following" : ""
+                    }`}
                     onClick={() => handleFollow(post.id)}
                   >
-                    {post.isFollowing ? 'Following' : 'Follow'}
+                    {post.isFollowing ? "Following" : "Follow"}
                   </button>
                 </div>
               </div>
@@ -362,8 +353,8 @@ const PostForm = ({
   textColor,
   onTextColorChange,
 }) => {
-  const [postText, setPostText] = useState(initialPostText || '');
-  const [userName, setUserName] = useState(initialUserName || '');
+  const [postText, setPostText] = useState(initialPostText || "");
+  const [userName, setUserName] = useState(initialUserName || "");
 
   const handlePostTextChange = (event) => {
     setPostText(event.target.value);
@@ -379,13 +370,17 @@ const PostForm = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (postText.trim() === '' || userName.trim() === '' || selectedTopic.trim() === '') {
-      alert('Please fill in all fields'); // Display an alert message
+    if (
+      postText.trim() === "" ||
+      userName.trim() === "" ||
+      selectedTopic.trim() === ""
+    ) {
+      alert("Please fill in all fields"); // Display an alert message
       return; // Don't post if any field is empty
     }
     onPost(postText, userName);
-    setPostText('');
-    setUserName('');
+    setPostText("");
+    setUserName("");
   };
 
   return (
@@ -417,14 +412,18 @@ const PostForm = ({
           <option value="Infectious Disease">Infectious Disease</option>
           <option value="Internal Medicine">Internal Medicine</option>
           <option value="Nephrology">Nephrology</option>
-          <option value="Obstetrics and Gynecology">Obstetrics and Gynecology</option>
+          <option value="Obstetrics and Gynecology">
+            Obstetrics and Gynecology
+          </option>
           <option value="Oncology">Oncology</option>
           <option value="Ophthalmology">Ophthalmology</option>
           <option value="Orthopedics">Orthopedics</option>
           <option value="Otolaryngology">Otolaryngology</option>
           <option value="Pathology">Pathology</option>
           <option value="Pediatrics">Pediatrics</option>
-          <option value="Physical Medicine and Rehabilitation">Physical Medicine and Rehabilitation</option>
+          <option value="Physical Medicine and Rehabilitation">
+            Physical Medicine and Rehabilitation
+          </option>
           <option value="Plastic Surgery">Plastic Surgery</option>
           <option value="Psychiatry">Psychiatry</option>
           <option value="Pulmonology">Pulmonology</option>
@@ -454,13 +453,12 @@ const PostForm = ({
           onChange={onTextColorChange}
         />
         <button className="post-button" type="submit">
-          {editMode ? 'Update' : 'Post'}
+          {editMode ? "Update" : "Post"}
         </button>
         {editMode && (
           <button className="cancel-button" onClick={onClose}>
             Cancel
           </button>
-          
         )}
       </form>
     </div>
@@ -468,4 +466,3 @@ const PostForm = ({
 };
 
 export default AddPostHome;
-
