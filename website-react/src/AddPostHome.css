@@ -4,7 +4,11 @@
     align-items: center;
     padding: 20px;
   }
-  
+  .topic-error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
   .post-list {
     margin-top: 20px;
   }
