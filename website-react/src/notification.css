@@ -1,0 +1,20 @@
+.notifications {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.notification {
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.update button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
