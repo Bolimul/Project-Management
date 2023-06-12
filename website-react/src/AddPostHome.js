@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import './AddPostHome.css';
+import{auth} from './firebase';
+import 'firebase/auth';
+import { FieldValue, addDoc, arrayUnion, arrayRemove, doc, updateDoc } from 'firebase/firestore';
+import { useEffect } from 'react';
+import { db } from './firebase';
+import { collection, getDocs } from 'firebase/firestore';
+
 
 const AddPostHome = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState('');
+  const [myPosts, setMyPosts] = useState([]);
   const [posts, setPosts] = useState([
     {
       id: '1',
@@ -46,8 +54,26 @@ const AddPostHome = () => {
     setEditMode(false);
     setEditPostId(null);
   };
-
-  const handlePost = (postText, userName) => {
+  
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const docRef = doc(db, 'users-profile-data', '57zOm9K4wwYmD4yNCen6');
+        const docSnap = await getDocs(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setMyPosts(data.myPosts || []); // Update the state with the fetched posts
+        } else {
+          console.log('No such document!');
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+  
+    fetchPosts();
+  }, []);
+  const handlePost = async (postText, userName) => {
     if (editMode && editPostId) {
       // Editing an existing post
       setPosts((prevPosts) =>
@@ -66,7 +92,8 @@ const AddPostHome = () => {
     } else {
       // Creating a new post
       const newPost = {
-        id: Date.now(),
+        title: "",
+        idPost: Date.now(),
         text: `${selectedTopic}: ${postText}`,
         userName: userName,
         image: postImage,
@@ -76,11 +103,33 @@ const AddPostHome = () => {
         saved: false,
         isFollowing: false,
       };
+  
+      try {
+        // Save the post to Firestore
+        const docRef = await updateDoc(doc(db, 'users-profile-data', "57zOm9K4wwYmD4yNCen6"), {myPosts: arrayUnion(newPost)});
+        console.log('Post added with ID: ', docRef.id);
+      } catch (error) {
+        console.error('Error adding post: ', error);
+      }
+  
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     }
-
+  
     handleFormClose();
   };
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'users-profile-data', '57zOm9K4wwYmD4yNCen6'));
+        const posts = querySnapshot.docs.map((doc) => doc.data().myPosts);
+        setMyPosts(posts);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+  
+    fetchPosts();
+  }, []);
 
   const handleEdit = (postId) => {
     const post = posts.find((p) => p.id === postId);
@@ -94,11 +143,21 @@ const AddPostHome = () => {
     }
   };
 
-  const handleDelete = (postId) => {
+  const handleDelete = async (postId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  
+    try {
+      // Remove the post from the 'myPosts' array in Firestore
+      const postRef = doc(db, 'users-profile-data', "57zOm9K4wwYmD4yNCen6");
+      await updateDoc(postRef, { 'myPosts': arrayRemove(postId) });
+      console.log('Post deleted:', postId);
+    } catch (error) {
+      console.error('Error deleting post:', postId, error);
+    }
   };
+  
 
-  const handleLike = (postId) => {
+  const handleLike = async (postId) => {
     if (!likedPosts.includes(postId)) {
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
@@ -106,6 +165,15 @@ const AddPostHome = () => {
         )
       );
       setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
+  
+      try {
+        // Update the liked posts array in Firestore
+        const postRef = doc(db, 'users-profile-data', "57zOm9K4wwYmD4yNCen6");
+        await updateDoc(postRef, { 'myPosts.like': arrayUnion(postId) });
+        console.log('Like added to post:', postId);
+      } catch (error) {
+        console.error('Error adding like to post:', postId, error);
+      }
     }
   };
 
@@ -311,10 +379,10 @@ const PostForm = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (postText.trim() === '' || userName.trim() === '') {
-      return; // Don't post empty text or username
+    if (postText.trim() === '' || userName.trim() === '' || selectedTopic.trim() === '') {
+      alert('Please fill in all fields'); // Display an alert message
+      return; // Don't post if any field is empty
     }
-
     onPost(postText, userName);
     setPostText('');
     setUserName('');
@@ -392,6 +460,7 @@ const PostForm = ({
           <button className="cancel-button" onClick={onClose}>
             Cancel
           </button>
+          
         )}
       </form>
     </div>
@@ -399,3 +468,4 @@ const PostForm = ({
 };
 
 export default AddPostHome;
+

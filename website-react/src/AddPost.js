@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import './AddPost.css';
+import{auth, db} from './firebase';
+import 'firebase/auth';
+import 'firebase/auth';
+import { FieldValue, addDoc, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+
 
 const AddPost = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -28,7 +33,7 @@ const AddPost = () => {
     setEditPostId(null);
   };
 
-  const handlePost = (postText, userName) => {
+  const handlePost = async (postText, userName) => {
     if (editMode && editPostId) {
       // Editing an existing post
       setPosts((prevPosts) =>
@@ -47,18 +52,29 @@ const AddPost = () => {
     } else {
       // Creating a new post
       const newPost = {
+        title: "",
         id: Date.now(),
         text: `${selectedTopic}: ${postText}`,
         userName: userName,
         image: postImage,
         textColor: textColor,
         likes: 0,
-        shares: 0,
+        shares: false,
         saved: false,
+        isFollowing: false,
       };
+  
+      try {
+        // Save the post to Firestore
+        const docRef = await updateDoc(doc(db, 'users-profile-data', "57zOm9K4wwYmD4yNCen6"), {myPosts: arrayUnion(newPost)});
+        console.log('Post added with ID: ', docRef.id);
+      } catch (error) {
+        console.error('Error adding post: ', error);
+      }
+  
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     }
-
+  
     handleFormClose();
   };
 
@@ -81,10 +97,13 @@ const AddPost = () => {
   const handleLike = (postId) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
-        post.id === postId ? { ...post, likes: post.likes + 1 } : post
+        post.id === postId && !post.liked
+          ? { ...post, likes: post.likes + 1, liked: true }
+          : post
       )
     );
   };
+  
 
   const handleShare = (postId) => {
     setPosts((prevPosts) =>
