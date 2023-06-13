@@ -30,13 +30,13 @@ function App() {
       <Router>
         {auth?.currentUser?.uid ? <NavBarSigned /> : <NavbarStart />}
         <Routes>
-          <Route path="/Home" element={<Home />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Register" element={<Register />} />
-          <Route path="/FriendsSearch" element={<FriendSearch />} />
-          <Route path="/PersonalInfo" element={<PersonalInfo />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/add_friend" element={<FriendSearch />} />
+
           <Route path="/blog" element={<AddPost />} />
-          <Route path="/FriendsPage" element={<FriendsPage />} />
+          <Route path="/friends" element={<FriendsPage />} />
           <Route path="/savedPosts" element={<PersonalAreaPostsSaved />} />
           <Route path="/analytics" element={<StatisticalInfo />} />
           <Route path="/following_users" element={<FollowingUsers />} />
