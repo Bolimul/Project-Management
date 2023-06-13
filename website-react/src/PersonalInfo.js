@@ -134,7 +134,7 @@ export const PersonalInfo = (props) =>
     const [personalQuestion, setPersonalQuestion] = useState(ExampleAccount.pQuestion);
     const [answer, setAnswer] = useState(ExampleAccount.pAnswer);
 
-    useEffect(()=>{setDataInfo()},[firstName,lastName]);
+    useEffect(()=>{setDataInfo()},[]);
 
     const setDataInfo = async()=>{
         var user = (await getDoc(doc(db,"users-profile-data",auth.currentUser.uid))).data().personalInfo;

@@ -55,6 +55,7 @@ const NavBar_Signed = () => {
     { title: "blog", path: "/blog", state: 0 },
     { title: "sign out", path: "/sign-out", state: 2, onClick: handleSignOut },
     { title: "mode", path: "/mode", state: 0 },
+    {title: "forum", path: "/forumPage", state:0},
   ];
 
   const handleDrawerToggle = () => {

@@ -16,7 +16,9 @@ import PersonalInfo from "./PersonalInfo";
 import StatisticalInfo from "./StatisticalInfo";
 import FollowingUsers from "./FollowingUsers";
 
+
 import "./Styles.css";
+import AddForumPost from "./AddForumPost";
 
 function App() {
   const [isPersonalPage, setIsPersonalPage] = useState(1);
@@ -40,6 +42,7 @@ function App() {
           <Route path="/analytics" element={<StatisticalInfo />} />
           <Route path="/following_users" element={<FollowingUsers />} />
           <Route path="/personalInfo" element={<PersonalInfo />} />
+          <Route path="/forumPage" element={<AddForumPost/>}/>
         </Routes>
         <footer>
           © {new Date().getFullYear()} Doctor Web. All rights reserved.
