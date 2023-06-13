@@ -1,29 +1,35 @@
-import React, { useState } from 'react';
-import './AddPost.css';
-import{auth, db} from './firebase';
-import 'firebase/auth';
-import 'firebase/auth';
-import { FieldValue, addDoc, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
-
+import React, { useState } from "react";
+import "./AddPost.css";
+import { auth, db } from "./firebase";
+import "firebase/auth";
+import "firebase/auth";
+import {
+  FieldValue,
+  addDoc,
+  arrayUnion,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 const AddPost = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
   const [openCommentFormId, setOpenCommentFormId] = useState(null);
-  const [commentText, setCommentText] = useState('');
+  const [commentText, setCommentText] = useState("");
 
   const [posts, setPosts] = useState([
     {
-      id: '123123',
-      userName: 'Sam Rogers',
-      text: 'Hello World!',
+      id: "123123",
+      userName: "Sam Rogers",
+      text: "Hello World!",
       likes: 3,
       shares: 2,
       comments: [], // New state for comments
     },
   ]);
-  const [selectedTopic, setSelectedTopic] = useState('');
+  const [selectedTopic, setSelectedTopic] = useState("");
 
   const handleButtonClick = () => {
     setIsFormOpen(true);
@@ -67,18 +73,21 @@ const AddPost = () => {
         saved: false,
         isFollowing: false,
       };
-  
+
       try {
         // Save the post to Firestore
-        const docRef = await updateDoc(doc(db, 'users-profile-data', "57zOm9K4wwYmD4yNCen6"), {myPosts: arrayUnion(newPost)});
-        console.log('Post added with ID: ', docRef.id);
+        const docRef = await updateDoc(
+          doc(db, "users-profile-data", "57zOm9K4wwYmD4yNCen6"),
+          { myPosts: arrayUnion(newPost) }
+        );
+        console.log("Post added with ID: ", docRef.id);
       } catch (error) {
-        console.error('Error adding post: ', error);
+        console.error("Error adding post: ", error);
       }
-  
+
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     }
-  
+
     handleFormClose();
   };
 
@@ -100,7 +109,7 @@ const AddPost = () => {
 
   const handleComment = (postId) => {
     setOpenCommentFormId(postId);
-    setCommentText('');
+    setCommentText("");
   };
 
   const handleSubmitComment = async (postId, commentText) => {
@@ -120,7 +129,7 @@ const AddPost = () => {
       // try {
       //   const usersPost = (await getDoc(doc(db, 'users-Profile-data', auth.currentUser.uid))).data().myPosts
       //   //const docRef = await updateDoc(doc(db, 'posts', postId), {
-      //   await updateDoc(doc(db, 'users-Profile-data', auth.currentUser.uid), ) 
+      //   await updateDoc(doc(db, 'users-Profile-data', auth.currentUser.uid), )
       //   comments: arrayUnion('Username':userName, 'idComment':Math.random(), 'textComment':commentText),
       //   console.log('Comment added with ID:', docRef.id);
       // } catch (error) {
@@ -129,7 +138,6 @@ const AddPost = () => {
     }
   };
 
-  
   const handleLike = (postId) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
@@ -139,13 +147,16 @@ const AddPost = () => {
       )
     );
   };
-  
 
   const handleShare = (postId) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
         post.id === postId
-          ? { ...post, shares: post.shares + (post.shared ? -1 : 1), shared: !post.shared }
+          ? {
+              ...post,
+              shares: post.shares + (post.shared ? -1 : 1),
+              shared: !post.shared,
+            }
           : post
       )
     );
@@ -157,24 +168,24 @@ const AddPost = () => {
         post.id === postId ? { ...post, saved: !post.saved } : post
       )
     );
-  
+
     // Save the post to the backend
     try {
-      const response = await fetch('/api/savePost', {
-        method: 'POST',
+      const response = await fetch("/api/savePost", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ postId }), // Send the post ID to the backend
       });
-  
+
       if (!response.ok) {
         // Handle error if the request was not successful
-        throw new Error('Failed to save the post');
+        throw new Error("Failed to save the post");
       }
-  
+
       // Post saved successfully
-      console.log('Post saved successfully');
+      console.log("Post saved successfully");
     } catch (error) {
       // Handle error
       console.error(error);
@@ -182,15 +193,15 @@ const AddPost = () => {
   };
 
   const getTopicFromPostText = (postText) => {
-    const topicEndIndex = postText.indexOf(':');
+    const topicEndIndex = postText.indexOf(":");
     if (topicEndIndex !== -1) {
       return postText.substring(0, topicEndIndex).trim();
     }
-    return '';
+    return "";
   };
 
-  const [postImage, setPostImage] = useState('');
-  const [textColor, setTextColor] = useState('#000000');
+  const [postImage, setPostImage] = useState("");
+  const [textColor, setTextColor] = useState("#000000");
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -209,7 +220,6 @@ const AddPost = () => {
             setPostImage(reader.result);
           } else {
             // Display a pop-up message or show an error state
-            alert('Picture is too big(1000 X 1000 max)');
           }
         };
       }
@@ -234,8 +244,8 @@ const AddPost = () => {
           onClose={handleFormClose}
           onPost={handlePost}
           editMode={editMode}
-          initialPostText={editMode && editPostId ? posts.text : ''}
-          initialUserName={editMode && editPostId ? posts.userName : ''}
+          initialPostText={editMode && editPostId ? posts.text : ""}
+          initialUserName={editMode && editPostId ? posts.userName : ""}
           selectedTopic={selectedTopic}
           onTopicChange={setSelectedTopic}
           postImage={postImage}
@@ -258,16 +268,16 @@ const AddPost = () => {
                     Like ({post.likes})
                   </button>
                   <button
-                   className={`share-button${post.shared ? ' shared' :""}`}
-                   onClick={() => handleShare(post.id)}
+                    className={`share-button${post.shared ? " shared" : ""}`}
+                    onClick={() => handleShare(post.id)}
                   >
-                    {post.shared ? 'Shared' : 'Share'} {post.shared && ''}
+                    {post.shared ? "Shared" : "Share"} {post.shared && ""}
                   </button>
                   <button
-                    className={`save-button${post.saved ? ' saved' : ''}`}
+                    className={`save-button${post.saved ? " saved" : ""}`}
                     onClick={() => handleSave(post.id)}
                   >
-                    {post.saved ? 'Saved' : 'Save'}
+                    {post.saved ? "Saved" : "Save"}
                   </button>
                 </div>
               </div>
@@ -298,21 +308,21 @@ const AddPost = () => {
                 Comment
               </button>
               {openCommentFormId === post.id && (
-              <div className="comment-form">
-                <textarea
-                  className="comment-textarea"
-                  placeholder="Add a comment..."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                />
-                <button 
-                className="submit-comment-button"
-                  onClick={() => handleSubmitComment(post.id)}
-                >
-                  Submit Comment
-                </button>
-              </div>
-            )}
+                <div className="comment-form">
+                  <textarea
+                    className="comment-textarea"
+                    placeholder="Add a comment..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                  />
+                  <button
+                    className="submit-comment-button"
+                    onClick={() => handleSubmitComment(post.id)}
+                  >
+                    Submit Comment
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -334,8 +344,8 @@ const PostForm = ({
   textColor,
   onTextColorChange,
 }) => {
-  const [postText, setPostText] = useState(initialPostText || '');
-  const [userName, setUserName] = useState(initialUserName || '');
+  const [postText, setPostText] = useState(initialPostText || "");
+  const [userName, setUserName] = useState(initialUserName || "");
 
   const handlePostTextChange = (event) => {
     setPostText(event.target.value);
@@ -351,13 +361,13 @@ const PostForm = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (postText.trim() === '' || userName.trim() === '') {
+    if (postText.trim() === "" || userName.trim() === "") {
       return; // Don't post empty text or username
     }
 
     onPost(postText, userName);
-    setPostText('');
-    setUserName('');
+    setPostText("");
+    setUserName("");
   };
 
   return (
@@ -389,14 +399,18 @@ const PostForm = ({
           <option value="Infectious Disease">Infectious Disease</option>
           <option value="Internal Medicine">Internal Medicine</option>
           <option value="Nephrology">Nephrology</option>
-          <option value="Obstetrics and Gynecology">Obstetrics and Gynecology</option>
+          <option value="Obstetrics and Gynecology">
+            Obstetrics and Gynecology
+          </option>
           <option value="Oncology">Oncology</option>
           <option value="Ophthalmology">Ophthalmology</option>
           <option value="Orthopedics">Orthopedics</option>
           <option value="Otolaryngology">Otolaryngology</option>
           <option value="Pathology">Pathology</option>
           <option value="Pediatrics">Pediatrics</option>
-          <option value="Physical Medicine and Rehabilitation">Physical Medicine and Rehabilitation</option>
+          <option value="Physical Medicine and Rehabilitation">
+            Physical Medicine and Rehabilitation
+          </option>
           <option value="Plastic Surgery">Plastic Surgery</option>
           <option value="Psychiatry">Psychiatry</option>
           <option value="Pulmonology">Pulmonology</option>
@@ -426,7 +440,7 @@ const PostForm = ({
           onChange={onTextColorChange}
         />
         <button className="post-button" type="submit">
-          {editMode ? 'Update' : 'Post'}
+          {editMode ? "Update" : "Post"}
         </button>
         {editMode && (
           <button className="cancel-button" onClick={onClose}>
