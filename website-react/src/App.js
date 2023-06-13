@@ -18,6 +18,7 @@ import FollowingUsers from "./FollowingUsers";
 
 
 import "./Styles.css";
+import AddForumPost from "./AddForumPost";
 
 function App() {
   const [isPersonalPage, setIsPersonalPage] = useState(1);
@@ -42,7 +43,7 @@ function App() {
           <Route path="/analytics" element={<StatisticalInfo />} />
           <Route path="/following_users" element={<FollowingUsers />} />
           <Route path="/personalInfo" element={<PersonalInfo />} />
-          
+          <Route path="/forumPage" element={<AddForumPost/>}/>
         </Routes>
       </Router>
     </div>
