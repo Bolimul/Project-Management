@@ -33,8 +33,8 @@ export function PersonalAreaPostsSaved(){
         });
         // setPosts_saved(await userDoc.data().savedPosts);
         // setPosts_liked(await userDoc.data().LikedPosts);
-        console.log(posts_saved[0].PostTitle)
-        console.log(posts_liked[0])
+        //console.log(posts_saved[0].PostTitle)
+        //console.log(posts_liked[0])
     }
     
     
