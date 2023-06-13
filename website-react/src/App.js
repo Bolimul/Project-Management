@@ -36,7 +36,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/add_friend" element={<FriendSearch />} />
-
           <Route path="/blog" element={<AddPost />} />
           <Route path="/friends" element={<FriendsPage />} />
           <Route path="/savedPosts" element={<PersonalAreaPostsSaved />} />
@@ -45,12 +44,12 @@ function App() {
           <Route path="/personalInfo" element={<PersonalInfo />} />
           <Route path="/forumPage" element={<AddForumPost/>}/>
         </Routes>
+        <footer>
+          © {new Date().getFullYear()} Doctor Web. All rights reserved.
+        </footer>
       </Router>
     </div>
   );
 }
 
 export default App;
-
-/*          <Route path="/personalInfo" element={<PersonalInfo />} />
- */

@@ -49,9 +49,9 @@ const NavBar_Signed = () => {
 
   const navLinks = [
     { title: "home", path: "/", state: 0 },
-    { title: "profile", path: "/PersonalInfo", state: 1 },
-    { title: "friends", path: "/FriendsPage", state: 0 },
-    { title: "add friend", path: "/FriendSearch", state: 0 },
+    { title: "profile", path: "/personalInfo", state: 1 },
+    { title: "friends", path: "/friends", state: 0 },
+    { title: "add friend", path: "/add_friend", state: 0 },
     { title: "blog", path: "/blog", state: 0 },
     { title: "sign out", path: "/sign-out", state: 2, onClick: handleSignOut },
     { title: "mode", path: "/mode", state: 0 },

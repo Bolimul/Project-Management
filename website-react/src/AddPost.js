@@ -3,13 +3,16 @@ import './AddPost.css';
 import{auth, db} from './firebase';
 import 'firebase/auth';
 import 'firebase/auth';
-import { FieldValue, addDoc, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { FieldValue, addDoc, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 
 const AddPost = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
+  const [openCommentFormId, setOpenCommentFormId] = useState(null);
+  const [commentText, setCommentText] = useState('');
+
   const [posts, setPosts] = useState([
     {
       id: '123123',
@@ -17,6 +20,7 @@ const AddPost = () => {
       text: 'Hello World!',
       likes: 3,
       shares: 2,
+      comments: [], // New state for comments
     },
   ]);
   const [selectedTopic, setSelectedTopic] = useState('');
@@ -94,6 +98,38 @@ const AddPost = () => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
   };
 
+  const handleComment = (postId) => {
+    setOpenCommentFormId(postId);
+    setCommentText('');
+  };
+
+  const handleSubmitComment = async (postId, commentText) => {
+    setOpenCommentFormId(postId);
+    //setCommentText('');
+    const postIndex = posts.findIndex((p) => p.id === postId);
+    if (postIndex !== -1) {
+      const updatedPosts = [...posts];
+      const updatedPost = {
+        ...updatedPosts[postIndex],
+        comments: [...updatedPosts[postIndex].comments, commentText],
+      };
+      updatedPosts[postIndex] = updatedPost;
+      setPosts(updatedPosts);
+
+      // Save the comment to the backend
+      // try {
+      //   const usersPost = (await getDoc(doc(db, 'users-Profile-data', auth.currentUser.uid))).data().myPosts
+      //   //const docRef = await updateDoc(doc(db, 'posts', postId), {
+      //   await updateDoc(doc(db, 'users-Profile-data', auth.currentUser.uid), ) 
+      //   comments: arrayUnion('Username':userName, 'idComment':Math.random(), 'textComment':commentText),
+      //   console.log('Comment added with ID:', docRef.id);
+      // } catch (error) {
+      //   console.error('Error adding comment:', error);
+      // }
+    }
+  };
+
+  
   const handleLike = (postId) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
@@ -255,6 +291,28 @@ const AddPost = () => {
               >
                 Delete
               </button>
+              <button
+                className="comment-button"
+                onClick={() => handleComment(post.id)}
+              >
+                Comment
+              </button>
+              {openCommentFormId === post.id && (
+              <div className="comment-form">
+                <textarea
+                  className="comment-textarea"
+                  placeholder="Add a comment..."
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                />
+                <button 
+                className="submit-comment-button"
+                  onClick={() => handleSubmitComment(post.id)}
+                >
+                  Submit Comment
+                </button>
+              </div>
+            )}
             </div>
           ))}
         </div>

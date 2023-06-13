@@ -13,6 +13,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
+import Home from "./Home";
 
 const StyledLink = styled(Link)({
   textDecoration: "none",
