@@ -277,9 +277,7 @@ export const PersonalInfo = (props) => {
       "personalInfo.PhoneNumber": data.PhoneNumber,
       "personalInfo.PQuestion": data.PQuestion,
       "personalInfo.AnswerToQ": data.AnswerToQ,
-    }).then(() => {
-      alert("Data has been updated");
-    });
+    }).then(() => {});
     setDataInfo();
     // setFirstName(data.FirstName)
     // setLastName(data.LastName)

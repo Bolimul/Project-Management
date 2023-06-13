@@ -103,9 +103,7 @@ export const Register = (props) => {
       .then((userCredential) => {
         userId = userCredential.user.uid;
       })
-      .then(() => {
-        alert("The user has been registered to the system");
-      });
+      .then(() => {});
     const IR = ref(storage, "profileImages/" + userId);
     const imageRef = await uploadBytes(IR, image).then((snapshot) =>
       getDownloadURL(snapshot.ref)

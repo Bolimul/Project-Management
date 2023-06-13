@@ -242,7 +242,6 @@ const AddPostHome = () => {
             setPostImage(reader.result);
           } else {
             // Display a pop-up message or show an error state
-            alert("Picture is too big(1000 X 1000 max)");
           }
         };
       }
@@ -375,7 +374,7 @@ const PostForm = ({
       userName.trim() === "" ||
       selectedTopic.trim() === ""
     ) {
-      alert("Please fill in all fields"); // Display an alert message
+      // Display an alert message
       return; // Don't post if any field is empty
     }
     onPost(postText, userName);
