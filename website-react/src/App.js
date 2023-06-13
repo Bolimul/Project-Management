@@ -39,6 +39,7 @@ function App() {
           <Route path="/savedPosts" element={<PersonalAreaPostsSaved />} />
           <Route path="/analytics" element={<StatisticalInfo />} />
           <Route path="/following_users" element={<FollowingUsers />} />
+          <Route path="/personalInfo" element={<PersonalInfo />} />
         </Routes>
         <footer>
           © {new Date().getFullYear()} Doctor Web. All rights reserved.
