@@ -48,7 +48,7 @@ const NavBar_Signed = () => {
   };
 
   const navLinks = [
-    { title: "home", path: "/", state: 0 },
+    { title: "home", path: "/home", state: 0 },
     { title: "profile", path: "/PersonalInfo", state: 1 },
     { title: "friends", path: "/FriendsPage", state: 0 },
     { title: "add friend", path: "/FriendSearch", state: 0 },
