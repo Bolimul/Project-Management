@@ -49,9 +49,9 @@ class NavbarStart extends Component {
 
   render() {
     const navLinks = [
-      { title: "Home", path: "/home", state: 0 },
-      { title: "Login", path: "/login", state: 2 },
-      { title: "Register", path: "/register", state: 2 },
+      { title: "Home", path: "/Home", state: 0 },
+      { title: "Login", path: "/Login", state: 2 },
+      { title: "Register", path: "/Register", state: 2 },
     ];
 
     switch (this.state.nS) {

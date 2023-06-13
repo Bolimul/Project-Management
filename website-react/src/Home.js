@@ -9,6 +9,9 @@ import {
 } from "firebase/firestore";
 import AddPostHome from "./AddPostHome";
 import "./HomeStyle.css";
+import DialogComponent from "./DialogComponent";
+import ImageComponent from "./ImageComponent";
+import "./HomeStyle.css";
 
 const Home = () => {
   const [allPosts, setAllPosts] = useState([]);
@@ -105,6 +108,10 @@ const Home = () => {
   return (
     <div className="home-container">
       <h1>Posts</h1>
+      <ImageComponent />{" "}
+      {/* You can place this where you want the image to appear */}
+      <DialogComponent />{" "}
+      {/* You can place this where you want the dialog button to appear */}
       <AddPostHome onPost={handlePost} />
       {allPosts.length > 0 && (
         <div className="post-list">

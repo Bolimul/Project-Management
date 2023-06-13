@@ -13,6 +13,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Drawer from "@mui/material/Drawer";
+import Home from "./Home";
 
 const StyledLink = styled(Link)({
   textDecoration: "none",
@@ -31,11 +32,11 @@ const Navbar = () => {
 
   const navLinks = [
     { title: "home", path: "/", state: 0 },
-    { title: "profile", path: "/profile", state: 1 },
-    { title: "friends", path: "/friends", state: 0 },
-    { title: "add friend", path: "/add-friend", state: 0 },
+    { title: "profile", path: "/PersonalInfo", state: 1 },
+    { title: "friends", path: "/FriendsPage", state: 0 },
+    { title: "add friend", path: "/FriendsSearch", state: 0 },
     { title: "blog", path: "/blog", state: 0 },
-    { title: "sign out", path: "/home", state: 2, onClick: handleSignOut },
+    { title: "sign out", path: "/Home", state: 2, onClick: handleSignOut },
     { title: "mode", path: "/mode", state: 0 },
   ];
 
