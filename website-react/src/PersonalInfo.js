@@ -1,7 +1,7 @@
-import {useState} from "react";
+import {useState,useEffect} from "react";
 import "./PersonalInfo.css";
 import {db} from "./firebase";
-import { doc, getDocs, collection, query, where, updateDoc, ref } from "firebase/firestore";
+import { doc, getDocs, collection, query, where, updateDoc, ref, getDoc } from "firebase/firestore";
 import {auth} from "./firebase"
 var ExampleAccount = {
     image: "",
@@ -80,38 +80,41 @@ const specialties = [
   ];
 
 
-const getData = async()=>{
-    const ref = await doc(db, "users-profile-data",auth.currentUser.uid)
-    const data = await getDocs(q)
-    const user = onsnapshot(ref,async(doc)=>{
-        setFirstName(await doc.data().personalInfo.FirstName);
-    })
-    ExampleAccount.firstName = user.FirstName;
-    ExampleAccount.lastName = user.LastName;
-    ExampleAccount.spec = user.Specialty;
-    ExampleAccount.bio = user.BioInfo;
-    ExampleAccount.phoneNum = user.PhoneNumber;
-    ExampleAccount.pQuestion = user.PQuestion;
-    ExampleAccount.pAnswer = user.AnswerToQ;
-    ExampleAccount.email = user.Email;
-    ExampleAccount.status = user.UserType;
-    ExampleAccount.city = user.City;
-    ExampleAccount.country = user.Country;
-    ExampleAccount.gender = user.Gender;
-    ExampleAccount.licenceNumber = user.LicenceNumber;
-    ExampleAccount.workplaceName = user.WorkplaceName;
-    ExampleAccount.nameCEO = user.nameCEO;
-    ExampleAccount.organisationName = user.organisationName;
-    ExampleAccount.organisationAddress = user.organisationAddress;
-    ExampleAccount.organisationPhone = user.organisationPhone;
-    ExampleAccount.studentNumber = user.studentNumber;
-    ExampleAccount.universityName = user.universityName;
-    ExampleAccount.image = user.ImageRef
-}
+// const setDataInfo = async()=>{
+//     var user = (await getDoc(doc(db,"users-profile-data",auth.currentUser.uid))).data().personalInfo;
+//     // onSnapshot(doc(db,"users-profile-data",auth.currentUser.uid), (doc)=> {
+//     //   user = doc.data().personalInfo;
+//     //})
+//     ExampleAccount.firstName = user.FirstName;
+//     ExampleAccount.lastName = user.LastName;
+//     ExampleAccount.spec = user.Specialty;
+//     ExampleAccount.bio = user.BioInfo;
+//     ExampleAccount.phoneNum = user.PhoneNumber;
+//     ExampleAccount.pQuestion = user.PQuestion;
+//     ExampleAccount.pAnswer = user.AnswerToQ;
+//     ExampleAccount.email = user.Email;
+//     ExampleAccount.status = user.UserType;
+//     ExampleAccount.city = user.City;
+//     ExampleAccount.country = user.Country;
+//     ExampleAccount.gender = user.Gender;
+//     ExampleAccount.licenceNumber = user.LicenceNumber;
+//     ExampleAccount.workplaceName = user.WorkplaceName;
+//     ExampleAccount.nameCEO = user.nameCEO;
+//     ExampleAccount.organisationName = user.organisationName;
+//     ExampleAccount.organisationAddress = user.organisationAddress;
+//     ExampleAccount.organisationPhone = user.organisationPhone;
+//     ExampleAccount.studentNumber = user.studentNumber;
+//     ExampleAccount.universityName = user.universityName;
+//     ExampleAccount.image = user.ImageRef
+//     console.log(ExampleAccount);
+//     setFirstName(ExampleAccount.firstName);
+//     setLastName(ExampleAccount.lastName);
+// }
 
 export const PersonalInfo = (props) =>
 {
-    useEffect()
+   
+    
 
     const [firstName, setFirstName] = useState(ExampleAccount.firstName);
     const [lastName, setLastName] = useState(ExampleAccount.lastName);
@@ -133,6 +136,57 @@ export const PersonalInfo = (props) =>
     const [phoneNumber, setPhoneNumber] = useState(ExampleAccount.phoneNum);
     const [personalQuestion, setPersonalQuestion] = useState(ExampleAccount.pQuestion);
     const [answer, setAnswer] = useState(ExampleAccount.pAnswer);
+
+    useEffect(()=>{setDataInfo()},[firstName,lastName]);
+
+    const setDataInfo = async()=>{
+        var user = (await getDoc(doc(db,"users-profile-data",auth.currentUser.uid))).data().personalInfo;
+        // onSnapshot(doc(db,"users-profile-data",auth.currentUser.uid), (doc)=> {
+        //   user = doc.data().personalInfo;
+        //})
+        ExampleAccount.firstName = user.FirstName;
+        ExampleAccount.lastName = user.LastName;
+        ExampleAccount.spec = user.Specialty;
+        ExampleAccount.bio = user.BioInfo;
+        ExampleAccount.phoneNum = user.PhoneNumber;
+        ExampleAccount.pQuestion = user.PQuestion;
+        ExampleAccount.pAnswer = user.AnswerToQ;
+        ExampleAccount.email = user.Email;
+        ExampleAccount.status = user.UserType;
+        ExampleAccount.city = user.City;
+        ExampleAccount.country = user.Country;
+        ExampleAccount.gender = user.Gender;
+        ExampleAccount.licenceNumber = user.LicenseNumber;
+        ExampleAccount.workplaceName = user.WorkplaceName;
+        ExampleAccount.nameCEO = user.nameCEO;
+        ExampleAccount.organisationName = user.organizationName;
+        ExampleAccount.organisationAddress = user.organizationAddress;
+        ExampleAccount.organisationPhone = user.organizationPhone;
+        ExampleAccount.studentNumber = user.studentNumber;
+        ExampleAccount.universityName = user.universityName;
+        ExampleAccount.image = user.ImageRef
+        console.log(ExampleAccount);
+        setFirstName(ExampleAccount.firstName);
+        setLastName(ExampleAccount.lastName);
+        setCountry(ExampleAccount.country)
+        setCity(ExampleAccount.city)
+        setSpecialty(ExampleAccount.spec)
+        setUserType(ExampleAccount.status)
+        setEmail(ExampleAccount.email)
+        setWorkplaceName(ExampleAccount.workplaceName)
+        setLicenseNumber(ExampleAccount.licenceNumber)
+        setOrganizationName(ExampleAccount.organisationName)
+        setOrganizationAdress(ExampleAccount.organisationAddress)
+        setOrganizationPhone(ExampleAccount.organisationPhone)
+        setStudentNumber(ExampleAccount.studentNumber)
+        setUniversityName(ExampleAccount.universityName)
+        setNameCEO(ExampleAccount.nameCEO)
+        setGender(ExampleAccount.gender)
+        setBioInfo(ExampleAccount.bio)
+        setPhoneNumber(ExampleAccount.phoneNum)
+        setPersonalQuestion(ExampleAccount.pQuestion)
+        setAnswer(ExampleAccount.pAnswer)
+    }
     const handleSubmit = async(e) => {
         const data = {
             FirstName: firstName,
@@ -141,7 +195,6 @@ export const PersonalInfo = (props) =>
             City: city,
             Specialty: specialty,
             UserType: userType,
-            Email: email,
             WorkplaceName: workplaceName,
             LicenseNumber: licenseNumber,
             organizationName: OrganizationName,
@@ -156,6 +209,7 @@ export const PersonalInfo = (props) =>
             PQuestion: personalQuestion,
             AnswerToQ: answer
         }
+        
           if(data.UserType === "Student")
           {
             data.LicenseNumber = ""
@@ -184,28 +238,51 @@ export const PersonalInfo = (props) =>
           const refCol = await collection(db, "users-profile-data")
         const q = await query(refCol, where("UserId", "==", auth.currentUser.uid))
         const newDocs = await getDocs(q)
-        const docRef = newDocs.docs[0].ref
-        await updateDoc(docRef, data).then(() => {alert("Data has been updated")})
-        setFirstName(data.FirstName)
-        setLastName(data.LastName)
-        setCountry(data.Country)
-        setCity(data.City)
-        setSpecialty(data.Specialty)
-        setUserType(data.UserType)
-        setEmail(data.Email)
-        setWorkplaceName(data.WorkplaceName)
-        setLicenseNumber(data.LicenseNumber)
-        setOrganizationName(data.organizationName)
-        setOrganizationAdress(data.organizationAddress)
-        setOrganizationPhone(data.organizationPhone)
-        setStudentNumber(data.studentNumber)
-        setUniversityName(data.universityName)
-        setNameCEO(data.NameCEO)
-        setGender(data.Gender)
-        setBioInfo(data.BioInfo)
-        setPhoneNumber(data.PhoneNumber)
-        setPersonalQuestion(data.PQuestion)
-        setAnswer(data.AnswerToQ)
+        const docRef = doc(db,"users-profile-data",auth.currentUser.uid);
+        await updateDoc(docRef, {
+            "personalInfo.FirstName" : data.FirstName,
+            "personalInfo.LastName" : data.LastName,
+            "personalInfo.Country" : data.Country,
+            "personalInfo.City": data.City,
+            "personalInfo.Specialty": data.Specialty,
+            "personalInfo.UserType": data.UserType,
+            "personalInfo.WorkplaceName":data.WorkplaceName,
+            "personalInfo.LicenseNumber":data.LicenseNumber,
+            "personalInfo.organizationName":data.organizationName,
+            "personalInfo.organizationAddress":data.organizationAddress,
+            "personalInfo.organizationPhone":data.organizationPhone,
+            "personalInfo.studentNumber":data.studentNumber,
+            "personalInfo.universityName":data.universityName,
+            "personalInfo.nameCEO" : data.nameCEO,
+            "personalInfo.Gender":data.Gender,
+            "personalInfo.BioInfo":data.BioInfo,
+            "personalInfo.PhoneNumber": data.PhoneNumber,
+            "personalInfo.PQuestion":data.PQuestion,
+            "personalInfo.AnswerToQ":data.AnswerToQ
+             }
+            
+        ).then(() => {alert("Data has been updated")});
+        setDataInfo();
+        // setFirstName(data.FirstName)
+        // setLastName(data.LastName)
+        // setCountry(data.Country)
+        // setCity(data.City)
+        // setSpecialty(data.Specialty)
+        // setUserType(data.UserType)
+        // setEmail(data.Email)
+        // setWorkplaceName(data.WorkplaceName)
+        // setLicenseNumber(data.LicenseNumber)
+        // setOrganizationName(data.organizationName)
+        // setOrganizationAdress(data.organizationAddress)
+        // setOrganizationPhone(data.organizationPhone)
+        // setStudentNumber(data.studentNumber)
+        // setUniversityName(data.universityName)
+        // setNameCEO(data.NameCEO)
+        // setGender(data.Gender)
+        // setBioInfo(data.BioInfo)
+        // setPhoneNumber(data.PhoneNumber)
+        // setPersonalQuestion(data.PQuestion)
+        // setAnswer(data.AnswerToQ)
     }
         return(
             <div>
@@ -286,8 +363,8 @@ export const PersonalInfo = (props) =>
                     </select>
                     <p>Change Bio:</p>
                     <input value={bioInfo} onChange={(e) => setBioInfo(e.target.value)}/>
-                    <p>Change Email:</p>
-                    <input value={email} onChange={(e) => setEmail(e.target.value)}/>
+                    {/* <p>Change Email:</p>
+                    <input value={email} onChange={(e) => setEmail(e.target.value)}/> */}
                     <p htmlFor="gender">Gender</p>
                     <select value={gender} onChange={(e) => setGender(e.target.value)} id="gender" name="gender">
                         <option value="Male">Male</option>
