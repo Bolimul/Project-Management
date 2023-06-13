@@ -48,14 +48,14 @@ const NavBar_Signed = () => {
   };
 
   const navLinks = [
-    { title: "home", path: "/", state: 0 },
+    { title: "home", path: "/Home", state: 0 },
     { title: "profile", path: "/personalInfo", state: 1 },
     { title: "friends", path: "/friends", state: 0 },
     { title: "add friend", path: "/add_friend", state: 0 },
     { title: "blog", path: "/blog", state: 0 },
     { title: "sign out", path: "/sign-out", state: 2, onClick: handleSignOut },
     { title: "mode", path: "/mode", state: 0 },
-    {title: "forum", path: "/forumPage", state:0},
+    { title: "forum", path: "/forumPage", state: 0 },
   ];
 
   const handleDrawerToggle = () => {
@@ -76,7 +76,6 @@ const NavBar_Signed = () => {
     };
   }, []);
 
-  let component = null;
   switch (nS) {
     case 2:
       return <NavbarStart />;

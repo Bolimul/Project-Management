@@ -25,7 +25,7 @@ class NavbarProfile extends React.Component {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Personal Area
           </Typography>
-          <Button color="inherit" component={RouterLink} to="/">
+          <Button color="inherit" component={RouterLink} to="/home">
             Home
           </Button>
           <Button color="inherit" component={RouterLink} to="/savedPosts">
@@ -44,23 +44,6 @@ class NavbarProfile extends React.Component {
       </AppBar>
     );
   }
-}
-
-function App() {
-  return (
-    <div className="App">
-      <Router>
-        <NavbarProfile />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/savedPosts" element={<PersonalAreaPostsSaved />} />
-          <Route path="/analytics" element={<StatisticalInfo />} />
-          <Route path="/personalInfo" element={<PersonalInfo />} />
-          <Route path="/following_users" element={<FollowingUsers />} />
-        </Routes>
-      </Router>
-    </div>
-  );
 }
 
 export default NavbarProfile;

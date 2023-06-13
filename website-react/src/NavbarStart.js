@@ -10,7 +10,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/system";
-import NavBar_Signed from "./NavBarSigned";
+import NavBarSigned from "./NavBarSigned";
 
 const StyledLink = styled(Link)({
   textDecoration: "none",
@@ -56,7 +56,7 @@ class NavbarStart extends Component {
 
     switch (this.state.nS) {
       case 0:
-        return <NavBar_Signed />;
+        return <NavBarSigned />;
       case 2:
         return (
           <AppBar position="static">
