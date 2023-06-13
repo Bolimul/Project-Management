@@ -12,9 +12,10 @@ import PersonalAreaPostsSaved from "./PersonalAreaPostsSaved";
 import FriendSearch from "./FriendSearch";
 import FriendsPage from "./FriendsPage";
 import AddPost from "./AddPost";
-//import PersonalInfo from "./PersonalInfo";
+import PersonalInfo from "./PersonalInfo";
 import StatisticalInfo from "./StatisticalInfo";
 import FollowingUsers from "./FollowingUsers";
+
 
 import "./Styles.css";
 
@@ -40,6 +41,8 @@ function App() {
           <Route path="/savedPosts" element={<PersonalAreaPostsSaved />} />
           <Route path="/analytics" element={<StatisticalInfo />} />
           <Route path="/following_users" element={<FollowingUsers />} />
+          <Route path="/personalInfo" element={<PersonalInfo />} />
+          
         </Routes>
       </Router>
     </div>
