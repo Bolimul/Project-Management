@@ -113,9 +113,6 @@ const specialties = [
 
 export const PersonalInfo = (props) =>
 {
-   
-    
-
     const [firstName, setFirstName] = useState(ExampleAccount.firstName);
     const [lastName, setLastName] = useState(ExampleAccount.lastName);
     const [country, setCountry] = useState(ExampleAccount.country);
