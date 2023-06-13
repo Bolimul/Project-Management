@@ -34,7 +34,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/add_friend" element={<FriendSearch />} />
-
           <Route path="/blog" element={<AddPost />} />
           <Route path="/friends" element={<FriendsPage />} />
           <Route path="/savedPosts" element={<PersonalAreaPostsSaved />} />
