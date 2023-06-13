@@ -32,7 +32,7 @@ export default function DialogComponent() {
           >
             <h1>Click Here</h1>
             <p>We are happy to host you here on our doctors website.</p>
-            <button onClick={() => setVisible(false)}>Close Dialog</button>
+            <button onClick={() => setVisible(false)}>Close</button>
           </div>
         </div>
       )}
