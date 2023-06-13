@@ -9,10 +9,11 @@ import {
   arrayRemove,
   doc,
   updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { useEffect } from "react";
 import { db } from "./firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 
 const AddPostHome = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -21,6 +22,8 @@ const AddPostHome = () => {
   const [selectedTopic, setSelectedTopic] = useState("");
   const [myPosts, setMyPosts] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [postTitle, setPostTitle] = useState(""); // Add this line
+  const [savedPostTitles, setSavedPostTitles] = useState([]);
 
   const [likedPosts, setLikedPosts] = useState([]); // New state variable to keep track of liked posts
 
@@ -36,24 +39,6 @@ const AddPostHome = () => {
     setEditPostId(null);
   };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const docRef = doc(db, "users-profile-data", auth.currentUser.uid);
-        const docSnap = await getDocs(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setMyPosts(data.myPosts || []); // Update the state with the fetched posts
-        } else {
-          console.log("No such document!");
-        }
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
-
-    fetchPosts();
-  }, []);
   const handlePost = async (postText, userName) => {
     if (editMode && editPostId) {
       // Editing an existing post
@@ -62,6 +47,7 @@ const AddPostHome = () => {
           post.id === editPostId
             ? {
                 ...post,
+                title: postTitle, // Add this line
                 text: `${selectedTopic}: ${postText}`,
                 userName: userName,
                 image: postImage,
@@ -73,7 +59,7 @@ const AddPostHome = () => {
     } else {
       // Creating a new post
       const newPost = {
-        title: "",
+        title: postTitle, // Add this line
         idPost: Date.now(),
         text: `${selectedTopic}: ${postText}`,
         userName: userName,
@@ -84,6 +70,7 @@ const AddPostHome = () => {
         saved: false,
         isFollowing: false,
       };
+      
 
       try {
         // Save the post to Firestore
@@ -101,22 +88,8 @@ const AddPostHome = () => {
 
     handleFormClose();
   };
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const querySnapshot = await getDocs(
-          collection(db, "users-profile-data", auth.currentUser.uid)
-        );
-        const posts = querySnapshot.docs.map((doc) => doc.data().myPosts);
-        setMyPosts(posts);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
 
-    fetchPosts();
-  }, []);
-
+  
   const handleEdit = (postId) => {
     const post = posts.find((p) => p.id === postId);
     if (post) {
@@ -131,7 +104,7 @@ const AddPostHome = () => {
 
   const handleDelete = async (postId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
-
+  
     try {
       // Remove the post from the 'myPosts' array in Firestore
       const postRef = doc(db, "users-profile-data", auth.currentUser.uid);
@@ -139,26 +112,6 @@ const AddPostHome = () => {
       console.log("Post deleted:", postId);
     } catch (error) {
       console.error("Error deleting post:", postId, error);
-    }
-  };
-
-  const handleLike = async (postId) => {
-    if (!likedPosts.includes(postId)) {
-      setPosts((prevPosts) =>
-        prevPosts.map((post) =>
-          post.id === postId ? { ...post, likes: post.likes + 1 } : post
-        )
-      );
-      setLikedPosts((prevLikedPosts) => [...prevLikedPosts, postId]);
-
-      try {
-        // Update the liked posts array in Firestore
-        const postRef = doc(db, "users-profile-data", auth.currentUser.uid);
-        await updateDoc(postRef, { "myPosts.like": arrayUnion(postId) });
-        console.log("Like added to post:", postId);
-      } catch (error) {
-        console.error("Error adding like to post:", postId, error);
-      }
     }
   };
 
@@ -182,28 +135,6 @@ const AddPostHome = () => {
         post.id === postId ? { ...post, saved: !post.saved } : post
       )
     );
-
-    // Save the post to the backend
-    try {
-      const response = await fetch("/api/savePost", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ postId }), // Send the post ID to the backend
-      });
-
-      if (!response.ok) {
-        // Handle error if the request was not successful
-        throw new Error("Failed to save the post");
-      }
-
-      // Post saved successfully
-      console.log("Post saved successfully");
-    } catch (error) {
-      // Handle error
-      console.error(error);
-    }
   };
 
   const handleFollow = (postId) => {
@@ -225,6 +156,9 @@ const AddPostHome = () => {
   const [postImage, setPostImage] = useState("");
   const [textColor, setTextColor] = useState("#000000");
 
+  const handleTitleChange = (event) => {
+    setPostTitle(event.target.value);
+  };
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -273,23 +207,21 @@ const AddPostHome = () => {
           onTopicChange={setSelectedTopic}
           postImage={postImage}
           onImageChange={handleImageChange}
+          postTitle={postTitle} // Add this line
+          onTitleChange={handleTitleChange} // Add this line
           textColor={textColor}
           onTextColorChange={handleTextColorChange}
         />
       )}
+
       {posts.length > 0 && (
         <div className="post-list">
           {posts.map((post) => (
             <div className="post-item" key={post.id}>
+              <div className="post-title">{post.title}</div> {/* Add this line */}
               <div className="post-header">
                 <div className="user-name">{post.userName}</div>
                 <div className="post-actions">
-                  <button
-                    className="like-button"
-                    onClick={() => handleLike(post.id)}
-                  >
-                    Like ({post.likes})
-                  </button>
                   <button
                     className={`share-button${post.shared ? " shared" : ""}`}
                     onClick={() => handleShare(post.id)}
@@ -348,8 +280,9 @@ const PostForm = ({
   initialUserName,
   selectedTopic,
   onTopicChange,
-  postImage,
   onImageChange,
+  postTitle,
+  onTitleChange,
   textColor,
   onTextColorChange,
 }) => {
@@ -363,6 +296,7 @@ const PostForm = ({
   const handleUserNameChange = (event) => {
     setUserName(event.target.value);
   };
+
 
   const handleTopicChange = (event) => {
     onTopicChange(event.target.value);
@@ -390,8 +324,8 @@ const PostForm = ({
           type="text"
           className="user-name-input"
           placeholder="Your Name"
-          value={userName}
-          onChange={handleUserNameChange}
+          value={userName} 
+          onChange={handleUserNameChange} 
         />
         <select
           className="topic-select"
@@ -438,7 +372,7 @@ const PostForm = ({
           className="post-textarea"
           placeholder="Write a post..."
           value={postText}
-          onChange={handlePostTextChange}
+          onChange={handlePostTextChange} 
         />
         <input
           type="file"
@@ -451,6 +385,13 @@ const PostForm = ({
           className="text-color-input"
           value={textColor}
           onChange={onTextColorChange}
+        />
+        <input
+          type="text"
+          className="post-title-input"
+          placeholder="Post Title"
+          value={postTitle}
+          onChange={onTitleChange} 
         />
         <button className="post-button" type="submit">
           {editMode ? "Update" : "Post"}

@@ -2,11 +2,18 @@ import React, { useState, useEffect } from "react";
 import { db, auth } from "./firebase";
 import {
   collection,
-  query,
-  orderBy,
-  limit,
   onSnapshot,
+  FieldValue,
+  updateDoc,
+  doc,
+  getDoc,
+  arrayUnion,
+  postTitlet,
+  query,
+  where,
+  getDocs
 } from "firebase/firestore";
+
 import AddPostHome from "./AddPostHome";
 import "./HomeStyle.css";
 import DialogComponent from "./DialogComponent";
@@ -15,23 +22,25 @@ import "./HomeStyle.css";
 
 const Home = () => {
   const [allPosts, setAllPosts] = useState([]);
+  const [followers, setFollowers] = useState([]);
 
   useEffect(() => {
     let unsubscribe;
 
     const fetchPosts = async () => {
       try {
-        const postsCollection = collection(
-          db,
-          "users-profile-data",
-          auth.currentUser.uid,
-          "myPosts"
-        );
-        const q = query(postsCollection, orderBy("likes", "desc"), limit(10));
-        unsubscribe = onSnapshot(q, (snapshot) => {
-          const posts = snapshot.docs.map((doc) => doc.data());
-          setAllPosts(posts);
-          console.log(allPosts);
+        const postsCollection = collection(db, "users-profile-data");
+        unsubscribe = onSnapshot(postsCollection, (snapshot) => {
+          const posts = snapshot.docs.map((doc) => doc.data().myPosts);
+          let arr = [];
+          posts.forEach((element) => {
+            if (Array.isArray(element)) {
+              element.forEach((e) => {
+                arr.push(e);
+              });
+            }
+          });
+          setAllPosts(arr);
         });
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -42,12 +51,41 @@ const Home = () => {
       fetchPosts();
     }
 
-    // Cleanup function to unsubscribe from the Firestore listener
     return () => {
       if (unsubscribe) unsubscribe();
     };
-  }, []); // adding an empty dependency array to ensure the effect runs only once on component mount
+  }, []);
 
+  const handleFollow = async (postId, postUserName) => {
+    try {
+      const follower = {
+        id: Date.now(),
+        userName: postUserName,
+        dateStartFollow: new Date().toISOString(),
+      };
+  
+      // const postIndex = allPosts.findIndex((post) => post.id === postId);
+      // if (postIndex !== -1) {
+      //   const updatedPosts = [...allPosts];
+      //   updatedPosts[postIndex].Followers.push(follower);
+      //   setAllPosts(updatedPosts);
+  
+         const userRef = doc(db, "users-profile-data", auth.currentUser.uid);
+      //   const userDoc = await getDoc(userRef);
+      //   const userPosts = userDoc.data().Followers;
+      //   console.log(userPosts)
+      //   userPosts[postIndex].followers.push(follower);
+        await updateDoc(userRef, {
+          "Followers": arrayUnion(follower),
+        });
+      }catch (error) {
+        console.error("Error adding follow:", error);
+    } 
+    }
+;
+  
+  
+  
   const handleShare = (postId) => {
     const postToShare = allPosts.find((post) => post.id === postId);
     if (postToShare) {
@@ -64,21 +102,32 @@ const Home = () => {
     }
   };
 
-  const handleLike = (postId) => {
-    setAllPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === postId ? { ...post, likes: post.likes + 1 } : post
-      )
-    );
-  };
 
-  const handleSave = (postId) => {
-    setAllPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === postId ? { ...post, saved: !post.saved } : post
-      )
-    );
+  const handleSave = async (postId) => {
+    const updatedPosts = allPosts.map((post) =>
+      post.id == postId ? { ...post, saved: !post.saved }  :  post
+ );
+    setAllPosts(updatedPosts);
+  
+    try {
+      const postToSave = updatedPosts.find((post) => post.id === postId);
+      if (postToSave) {
+        const postRef = doc(
+          db,
+          "users-profile-data",
+          auth.currentUser.uid
+        );
+        const st = postToSave.idPost +" "+ postToSave.text
+        await updateDoc(postRef, {
+          savedPosts: arrayUnion(st)
+        });
+        console.log("Post saved:", postId);
+      }
+    } catch (error) {
+      console.error("Error saving post:", postId, error);
+    }
   };
+  
 
   const handlePost = async (postText, userName) => {
     try {
@@ -91,13 +140,14 @@ const Home = () => {
         saved: false,
       };
 
-      const docRef = collection(
+      const docRef = doc(
         db,
         "users-profile-data",
         auth.currentUser.uid,
-        "myPosts"
+        "myPosts",
+        String(post.id)
       );
-      await db.doc(docRef, String(post.id)).set(post);
+      await updateDoc(docRef, post);
 
       setAllPosts((prevPosts) => [post, ...prevPosts]);
     } catch (error) {
@@ -123,11 +173,11 @@ const Home = () => {
               <h3>{post.userName}</h3>
               <p>{post.text}</p>
               <div className="post-actions">
-                <button
-                  className="like-button"
-                  onClick={() => handleLike(post.id)}
+              <button
+                className="follow-button"
+                onClick={() => handleFollow(post.id, post.userName)}
                 >
-                  Like ({post.likes})
+                Follow
                 </button>
                 <button
                   className="share-button"
@@ -136,8 +186,15 @@ const Home = () => {
                   Share ({post.shares})
                 </button>
                 <button
+                className={`save-button${post.saved ? " saved" : ""}`}
+                onClick={() => handleSave(post.id)}
+                >
+                {post.saved ? "Saved" : "Save"}
+                </button>
+
+                <button
                   className={`save-button${post.saved ? " saved" : ""}`}
-                  onClick={() => handleSave(post.id)}
+                  // onClick={() => handleSave(post.)}
                 >
                   {post.saved ? "Saved" : "Save"}
                 </button>

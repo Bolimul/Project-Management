@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
-import './AddPost.css';
-import{auth, db} from './firebase';
-import 'firebase/auth';
-import 'firebase/auth';
-import { FieldValue, addDoc, arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
+
+import React, { useState } from "react";
+import "./AddPostHome.css";
+import { auth } from "./firebase";
+import "firebase/auth";
+import {  
+  arrayUnion,
+  doc,
+  updateDoc,
+  getDoc,
+  getDocs
+} from "firebase/firestore";
+import { useEffect } from "react";
+import { db } from "./firebase";
+import {onSnapshot, collection } from "firebase/firestore";
+
 
 
 const AddPost = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editPostId, setEditPostId] = useState(null);
-  const [openCommentFormId, setOpenCommentFormId] = useState(null);
-  const [commentText, setCommentText] = useState('');
-
-  const [posts, setPosts] = useState([
+  const [posts, setPosts, setMyPosts] = useState([
     {
       id: '123123',
       userName: 'Sam Rogers',
@@ -37,6 +44,28 @@ const AddPost = () => {
     setEditPostId(null);
   };
 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const docRef = doc(db, "users-profile-data", auth.currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        const unsub = onSnapshot(doc(db, "user-profile-info", auth.currentUser.uid), (doc) => {
+          if (doc.exists()) {
+            const data = doc.data();
+            console.log(data)
+            setMyPosts(data.myPosts || []); // Update the state with the fetched posts
+          } else {
+            console.log("No such document!");
+          }
+      });
+
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
   const handlePost = async (postText, userName) => {
     if (editMode && editPostId) {
       // Editing an existing post
@@ -57,7 +86,7 @@ const AddPost = () => {
       // Creating a new post
       const newPost = {
         title: "",
-        id: Date.now(),
+        idPost: Date.now(),
         text: `${selectedTopic}: ${postText}`,
         userName: userName,
         image: postImage,
@@ -67,20 +96,38 @@ const AddPost = () => {
         saved: false,
         isFollowing: false,
       };
-  
+
       try {
         // Save the post to Firestore
-        const docRef = await updateDoc(doc(db, 'users-profile-data', "57zOm9K4wwYmD4yNCen6"), {myPosts: arrayUnion(newPost)});
-        console.log('Post added with ID: ', docRef.id);
+        const docRef = await updateDoc(
+          doc(db, "users-profile-data", auth.currentUser.uid),
+          { myPosts: arrayUnion(newPost) }
+        );
+        console.log("Post added with ID: ", docRef.id);
       } catch (error) {
-        console.error('Error adding post: ', error);
+        console.error("Error adding post: ", error);
       }
-  
+
       setPosts((prevPosts) => [newPost, ...prevPosts]);
     }
-  
+
     handleFormClose();
   };
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const querySnapshot = await getDocs(
+          collection(db, "users-profile-data")
+        );
+        const posts = querySnapshot.docs.map((doc) => doc.data().myPosts);
+        setMyPosts(posts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const handleEdit = (postId) => {
     const post = posts.find((p) => p.id === postId);
