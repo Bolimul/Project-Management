@@ -23,7 +23,7 @@ class NavbarProfile extends React.Component {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Material Tailwind
+            Personal Area
           </Typography>
           <Button color="inherit" component={RouterLink} to="/">
             Home

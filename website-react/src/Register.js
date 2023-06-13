@@ -4,6 +4,7 @@ import { auth, db, storage } from "./firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, setDoc, doc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import "./Register.css"; // Import the new CSS file
 
 const countries = [
   "Australia",
@@ -111,50 +112,47 @@ export const Register = (props) => {
     );
 
     const data = {
-
       Followers: [],
       LikedPosts: [],
       friends: [],
       meetings: [],
-      myposts:[],
+      myposts: [],
       personalInfo: {
-      FirstName: firstName,
-      LastName: lastName,
-      Country: country,
-      City: city,
-      Specialty: specialty,
-      UserType: userType,
-      Email: email,
-      WorkplaceName: workplaceName,
-      LicenseNumber: licenseNumber,
-      organizationName: OrganizationName,
-      organizationAddress: OrganizationAdress,
-      organizationPhone: OrganizationPhone,
-      studentNumber: StudentNumber,
-      universityName: UniversityName,
-      nameCEO: NameCEO,
-      Gender: gender,
-      BioInfo: bioInfo,
-      PhoneNumber: phoneNumber,
-      PQuestion: personalQuestion,
-      AnswerToQ: answer,
-      UserId: userId,
-      ImageRef: imageRef,
-      UserName: username
+        FirstName: firstName,
+        LastName: lastName,
+        Country: country,
+        City: city,
+        Specialty: specialty,
+        UserType: userType,
+        Email: email,
+        WorkplaceName: workplaceName,
+        LicenseNumber: licenseNumber,
+        organizationName: OrganizationName,
+        organizationAddress: OrganizationAdress,
+        organizationPhone: OrganizationPhone,
+        studentNumber: StudentNumber,
+        universityName: UniversityName,
+        nameCEO: NameCEO,
+        Gender: gender,
+        BioInfo: bioInfo,
+        PhoneNumber: phoneNumber,
+        PQuestion: personalQuestion,
+        AnswerToQ: answer,
+        UserId: userId,
+        ImageRef: imageRef,
+        UserName: username,
       },
-      savedPosts: []
+      savedPosts: [],
     };
     //const colRef = collection(db, "users-profile-data")
     //await addDoc(colRef, data)
 
-    setDoc(doc(db, "users-profile-data", auth.currentUser.uid),data);
-
-
+    setDoc(doc(db, "users-profile-data", auth.currentUser.uid), data);
   };
 
   return (
     <div className="auth-form-container">
-      <h2>Register page</h2>
+      <h2 className="form-heading">Register</h2>
       <form className="register-form" onSubmit={handleSubmit}>
         <label htmlFor="firstName">First Name</label>
         <input
@@ -469,10 +467,12 @@ export const Register = (props) => {
           id="username"
           name="username"
         />
-        <button type="submit">Log In</button>
+        <button className="submit-btn" type="submit">
+          Register
+        </button>
       </form>
 
-      <Link to="/login">
+      <Link to="/login" className="link">
         <button className="link-btn">
           Already have an account? Log in here.
         </button>
