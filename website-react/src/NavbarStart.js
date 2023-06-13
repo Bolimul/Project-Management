@@ -1,13 +1,38 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import {
-  Navbar,
-  MobileNav,
-  Typography,
-  Button,
-  IconButton,
-} from "@material-tailwind/react";
-import NavBar_Signed from "./NavBar_Signed";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import { styled } from "@mui/system";
+import NavBar_Signed from "./NavBarSigned";
+
+const StyledLink = styled(Link)({
+  textDecoration: "none",
+  color: "inherit",
+});
+
+const StyledIconButton = styled(IconButton)({
+  marginLeft: "10px", // Increase the left margin to move the hamburger icon to the right
+});
+
+const StyledListItemText = styled(ListItemText)({
+  fontSize: "20rem", // Increase the size of the text inside the menu
+  fontFamily: "'Courier New', Courier, monospace", // Change the font
+  textAlign: "left", // Text align to right
+});
+
+const StyledDrawer = styled(Drawer)({
+  width: "350px", // Increase the width of the drawer
+  ".MuiDrawer-paper": {
+    width: "200px", // This makes sure the drawer paper also have same width as drawer
+  },
+});
 
 class NavbarStart extends Component {
   constructor(props) {
@@ -23,108 +48,52 @@ class NavbarStart extends Component {
   };
 
   render() {
-    const navList = (
-      <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-        <Typography
-          as="li"
-          variant="small"
-          color="blue-gray"
-          className="p-1 font-normal"
-        >
-          <Link to="/home" onClick={() => this.setState({ nS: 0 })}>
-            Home
-          </Link>
-        </Typography>
-        <Typography
-          as="li"
-          variant="small"
-          color="blue-gray"
-          className="p-1 font-normal"
-        >
-          <Link to="/login" onClick={() => this.setState({ nS: 2 })}>
-            Login
-          </Link>
-        </Typography>
-        <Typography
-          as="li"
-          variant="small"
-          color="blue-gray"
-          className="p-1 font-normal"
-        >
-          <Link to="/register" onClick={() => this.setState({ nS: 2 })}>
-            Register
-          </Link>
-        </Typography>
-      </ul>
-    );
+    const navLinks = [
+      { title: "Home", path: "/home", state: 0 },
+      { title: "Login", path: "/login", state: 2 },
+      { title: "Register", path: "/register", state: 2 },
+    ];
 
     switch (this.state.nS) {
       case 0:
         return <NavBar_Signed />;
       case 2:
         return (
-          <>
-            <Navbar className="sticky inset-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4">
-              <div className="flex items-center justify-between text-blue-gray-900">
-                <Typography
-                  as="a"
-                  href="#"
-                  className="mr-4 cursor-pointer py-1.5 font-medium"
-                >
-                  Your Logo
-                </Typography>
-                <div className="flex items-center gap-4">
-                  <div className="mr-4 hidden lg:block">{navList}</div>
-                  <IconButton
-                    variant="text"
-                    className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
-                    ripple={false}
-                    onClick={this.handleClick}
-                  >
-                    {this.state.openNav ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        className="h-6 w-6"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M4 6h16M4 12h16M4 18h16"
-                        />
-                      </svg>
-                    )}
-                  </IconButton>
-                  <Button
-                    variant="gradient"
-                    size="sm"
-                    onClick={() => this.setState({ nS: 1 })}
-                    className="hidden lg:inline-block"
-                  >
-                    Sign In
-                  </Button>
-                </div>
-              </div>
-              <MobileNav open={this.state.openNav}>{navList}</MobileNav>
-            </Navbar>
-          </>
+          <AppBar position="static">
+            <Toolbar>
+              <StyledLink to="/">Welcome to Doctor Web</StyledLink>
+              <StyledIconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={this.handleClick}
+              >
+                <MenuIcon />
+              </StyledIconButton>
+              <StyledDrawer
+                anchor="left"
+                open={this.state.openNav}
+                onClose={this.handleClick}
+              >
+                <IconButton onClick={this.handleClick}>
+                  <CloseIcon />
+                </IconButton>
+                <List>
+                  {navLinks.map(({ title, path, state }, index) => (
+                    <StyledLink
+                      to={path}
+                      key={index}
+                      onClick={() => this.setState({ nS: state })}
+                    >
+                      <ListItem button>
+                        <StyledListItemText primary={title} />
+                      </ListItem>
+                    </StyledLink>
+                  ))}
+                </List>
+              </StyledDrawer>
+            </Toolbar>
+          </AppBar>
         );
       default:
         return null;

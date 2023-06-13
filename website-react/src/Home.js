@@ -14,6 +14,8 @@ const Home = () => {
   const [allPosts, setAllPosts] = useState([]);
 
   useEffect(() => {
+    let unsubscribe;
+
     const fetchPosts = async () => {
       try {
         const postsCollection = collection(
@@ -23,13 +25,11 @@ const Home = () => {
           "myPosts"
         );
         const q = query(postsCollection, orderBy("likes", "desc"), limit(10));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
+        unsubscribe = onSnapshot(q, (snapshot) => {
           const posts = snapshot.docs.map((doc) => doc.data());
           setAllPosts(posts);
           console.log(allPosts);
         });
-
-        return unsubscribe;
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -38,7 +38,12 @@ const Home = () => {
     if (auth.currentUser) {
       fetchPosts();
     }
-  }, []);
+
+    // Cleanup function to unsubscribe from the Firestore listener
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []); // adding an empty dependency array to ensure the effect runs only once on component mount
 
   const handleShare = (postId) => {
     const postToShare = allPosts.find((post) => post.id === postId);

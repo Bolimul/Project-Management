@@ -1,111 +1,66 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { auth } from "./firebase";
-import MenuIcon from "@mui/icons-material/Menu";
-import { styled } from "@mui/system";
-import NavbarProfile from "./NavbarProfile";
-import NavbarStart from "./NavbarStart";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
+import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import Drawer from "@mui/material/Drawer";
+import MenuIcon from "@mui/icons-material/Menu";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
-const StyledLink = styled(Link)({
-  textDecoration: "none",
-  color: "inherit",
-});
+import Home from "./Home";
+import PersonalAreaPostsSaved from "./PersonalAreaPostsSaved";
+import StatisticalInfo from "./StatisticalInfo";
+import PersonalInfo from "./PersonalInfo";
+import FollowingUsers from "./FollowingUsers";
 
-const NavBar_Signed = () => {
-  const [nS, setNS] = useState(0);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const handleSignOut = async () => {
-    await auth.signOut();
-    console.log(auth.currentUser);
-    setNS(2);
-  };
-
-  const navLinks = [
-    { title: "home", path: "/", state: 0 },
-    { title: "profile", path: "/profile", state: 1 },
-    { title: "friends", path: "/friends", state: 0 },
-    { title: "add friend", path: "/add-friend", state: 0 },
-    { title: "blog", path: "/blog", state: 0 },
-    { title: "sign out", path: "/sign-out", state: 2, onClick: handleSignOut },
-    { title: "mode", path: "/mode", state: 0 },
-  ];
-
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 960) {
-        setDrawerOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  switch (nS) {
-    case 2:
-      return <NavbarStart />;
-    case 1:
-      return <NavbarProfile />;
-    case 0:
-      return (
-        <AppBar position="static">
-          <Toolbar>
-            <StyledLink to="/home">Doctor Web</StyledLink>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Drawer
-              anchor="left"
-              open={drawerOpen}
-              onClose={handleDrawerToggle}
-            >
-              <IconButton onClick={handleDrawerToggle}>
-                <CloseIcon />
-              </IconButton>
-              <List>
-                {navLinks.map(({ title, path, state, onClick }, index) => (
-                  <StyledLink
-                    to={path}
-                    key={index}
-                    onClick={() => {
-                      setNS(state);
-                      if (onClick) onClick();
-                    }}
-                  >
-                    <ListItem button>
-                      <ListItemText primary={title} />
-                    </ListItem>
-                  </StyledLink>
-                ))}
-              </List>
-            </Drawer>
-          </Toolbar>
-        </AppBar>
-      );
-    default:
-      return null;
+class NavbarProfile extends React.Component {
+  render() {
+    return (
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Material Tailwind
+          </Typography>
+          <Button color="inherit" component={RouterLink} to="/">
+            Home
+          </Button>
+          <Button color="inherit" component={RouterLink} to="/savedPosts">
+            Posts
+          </Button>
+          <Button color="inherit" component={RouterLink} to="/analytics">
+            Analytics
+          </Button>
+          <Button color="inherit" component={RouterLink} to="/personalInfo">
+            Info
+          </Button>
+          <Button color="inherit" component={RouterLink} to="/following_users">
+            Following Users
+          </Button>
+        </Toolbar>
+      </AppBar>
+    );
   }
-};
+}
 
-export default NavBar_Signed;
+function App() {
+  return (
+    <div className="App">
+      <Router>
+        <NavbarProfile />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/savedPosts" element={<PersonalAreaPostsSaved />} />
+          <Route path="/analytics" element={<StatisticalInfo />} />
+          <Route path="/personalInfo" element={<PersonalInfo />} />
+          <Route path="/following_users" element={<FollowingUsers />} />
+        </Routes>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
